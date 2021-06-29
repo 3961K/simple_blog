@@ -1,0 +1,22 @@
+body {
+    background-color: #ffffff;
+}
+
+ul li {
+    list-style: none;
+}
+
+.content-register {
+    margin : 25% ;
+    padding : 2% ;
+    border : 0.5px solid #cccccc ;
+    border-radius: 1em;
+    background-color: #ffffff;
+}
+
+.form-group label {
+    margin-top: 7px;
+    margin-right: 10px;
+    width: 200px;
+    float: left;
+}

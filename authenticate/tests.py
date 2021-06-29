@@ -6,7 +6,7 @@ from django.urls import reverse
 
 
 from .models import User, Relation
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 
 # Create your tests here.
 
@@ -254,7 +254,6 @@ class LoginFormTest(TestCase):
         self.assertFalse(form.is_valid())
 
 
-# @override_settings(AXES_HANDLER='axes.handlers.dummy.AxesDummyHandler')
 class LoginViewTest(TestCase):
     # ログイン用のユーザを作成
     @classmethod
@@ -280,10 +279,11 @@ class LoginViewTest(TestCase):
                                     format='text/html')
         self.assertEqual(response.status_code, 302)
 
-    # 正しくないユーザ名・パスワードの組み合わせではログインする事が出来ない
+    # 正しくないユーザ名・パスワードの組み合わせではログインする事が出来ず,
+    # 4回目のログイン失敗によってアカウントがロックされる
     def test_fail_login(self):
-        err_message = 'Please enter a correct username and password. '\
-                      'Note that both fields may be case-sensitive.'
+        err_message = '正しいユーザー名とパスワードを入力してください。'\
+            'どちらのフィールドも大文字と小文字は区別されます。'
 
         wrong_value_list = [
             ['loginviewtester', 'wrongpassword'],
@@ -312,3 +312,175 @@ class LogoutViewTest(TestCase):
     def test_success_access(self):
         response = self.client.get(reverse('authenticate:logout'))
         self.assertEqual(response.status_code, 302)
+
+
+class RegisterFormTest(TestCase):
+    # 正しい形式の値は妥当である
+    def test_valid_form(self):
+        register_info = {
+            'username': 'formtester',
+            'email': 'formtester@test.com',
+            'password1': 'f0rmt3st3r0123',
+            'password2': 'f0rmt3st3r0123'
+        }
+        form = RegisterForm(data=register_info)
+        self.assertTrue(form.is_valid())
+
+    # 必須フィールドが欠けた値は妥当でない
+    def test_invalid_missed_required(self):
+        missied_register_info_list = [
+            {
+                'email': 'formtester@test.com',
+                'password1': 'f0rmt3st3r0123',
+                'password2': 'f0rmt3st3r0123'
+            },
+            {
+                'username': 'formtester',
+                'password1': 'f0rmt3st3r0123',
+                'password2': 'f0rmt3st3r0123'
+            },
+            {
+                'username': 'formtester',
+                'email': 'formtester@test.com',
+                'password2': 'f0rmt3st3r0123'
+            },
+            {
+                'username': 'formtester',
+                'email': 'formtester@test.com',
+                'password1': 'f0rmt3st3r0123'
+            },
+        ]
+
+        for missied_register_info in missied_register_info_list:
+            form = RegisterForm(data=missied_register_info)
+            self.assertFalse(form.is_valid())
+
+    # 誤った形式の値は妥当では無い
+    def test_invalid_wrong_format(self):
+        wrong_format_register_info_list = [
+            {
+                'username': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+                'email': 'formtester@test.com',
+                'password1': 'f0rmt3st3r0123',
+                'password2': 'f0rmt3st3r0123'
+            },
+            {
+                'username': 'formtester',
+                'email': 'formtester@a.a',
+                'password1': 'f0rmt3st3r0123',
+                'password2': 'f0rmt3st3r0123'
+            },
+            {
+                'username': 'formtester',
+                'email': 'formtester@a.a',
+                'password1': 'f0rmt3st3r0123',
+                'password2': 'f0rmt3st3r0124'
+            }
+        ]
+
+        for wrong_format_register_info in wrong_format_register_info_list:
+            form = RegisterForm(data=wrong_format_register_info)
+            self.assertFalse(form.is_valid())
+
+    # 重複が禁止されているため既に登録されているユーザ名・メールアドレスを含んだ値は妥当でない
+    def test_invalid_duplicated(self):
+        User(username='exited',
+             email='exited@test.com',
+             password='ex1te3dpass').save()
+
+        exited_register_info_list = [
+            {
+                'username': 'exited',
+                'email': 'formtester@test.com',
+                'password1': 'f0rmt3st3r0123',
+                'password2': 'f0rmt3st3r0123'
+            },
+            {
+                'username': 'formtester',
+                'email': 'exited@test.com',
+                'password1': 'f0rmt3st3r0123',
+                'password2': 'f0rmt3st3r0123'
+            },
+        ]
+
+        for exited_register_info in exited_register_info_list:
+            form = RegisterForm(data=exited_register_info)
+            self.assertFalse(form.is_valid())
+
+
+class RegisterViewTest(TestCase):
+    # ユーザ登録ページにアクセス出来る
+    def test_success_access(self):
+        response = self.client.get(reverse('authenticate:register'))
+        self.assertEqual(response.status_code, 200)
+
+    # 必須フィールドのみ入力する事でユーザ登録する事が出来る
+    def test_success_register(self):
+        register_info = {
+            'username': 'viewtester',
+            'email': 'viewtester@test.com',
+            'password1': 'v1ewt3st3r1234',
+            'password2': 'v1ewt3st3r1234',
+        }
+        response = self.client.post(reverse('authenticate:register'),
+                                    register_info,
+                                    format='text/html')
+        self.assertEqual(response.status_code, 302)
+
+    # 誤った形式のユーザ名・メールアドレスでは登録する事が出来ない
+    def test_fail_register_wrongformat(self):
+        err_message_username = 'この値は 30 文字以下でなければなりません'
+        err_message_email = '有効なメールアドレスを入力してください。'
+
+        wrong_format_username = {
+            'username': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+            'email': 'viewtester@test.com',
+            'password1': 'v1ewt3st3r1234',
+            'password2': 'v1ewt3st3r1234',
+        }
+        response = self.client.post(reverse('authenticate:register'),
+                                    wrong_format_username,
+                                    format='text/html')
+        self.assertContains(response, err_message_username)
+
+        wrong_format_email = {
+            'username': 'viewtester',
+            'email': 'viewtester@a.a',
+            'password1': 'v1ewt3st3r1234',
+            'password2': 'v1ewt3st3r1234',
+        }
+        response = self.client.post(reverse('authenticate:register'),
+                                    wrong_format_email,
+                                    format='text/html')
+        self.assertContains(response, err_message_email)
+
+    # 既に登録済みのユーザ名・メールアドレスでは登録する事が出来ない
+    def test_fail_register_duplicated(self):
+        User.objects.create_user(username='viewtester',
+                                 email='viewtester@test.com',
+                                 password='v1ewt3st3r1234')
+
+        err_message_duplicated_username = '同じユーザー名が既に登録済みです。'
+        duplicated_username = {
+            'username': 'viewtester',
+            'email': 'viewtester2@test.com',
+            'password1': 'v1ewt3st3r1234',
+            'password2': 'v1ewt3st3r1234',
+        }
+        response = self.client.post(reverse('authenticate:register'),
+                                    duplicated_username,
+                                    format='text/html')
+        self.assertContains(response, err_message_duplicated_username)
+
+        err_message_duplicated_email = 'この メールアドレス を持った ユーザー '\
+            'が既に存在します。'
+        duplicated_email = {
+            'username': 'viewtester2',
+            'email': 'viewtester@test.com',
+            'password1': 'v1ewt3st3r1234',
+            'password2': 'v1ewt3st3r1234',
+        }
+        response = self.client.post(reverse('authenticate:register'),
+                                    duplicated_email,
+                                    format='text/html')
+        self.assertContains(response, err_message_duplicated_email)

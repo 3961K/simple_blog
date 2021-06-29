@@ -1,4 +1,5 @@
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+
 from .models import User
 
 
@@ -19,3 +20,14 @@ class LoginForm(AuthenticationForm):
             raise self.get_invalid_login_error()
 
         return cleaned_data
+
+
+class RegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
