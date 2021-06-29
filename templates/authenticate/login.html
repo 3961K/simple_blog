@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_header %}
+    <link rel="stylesheet" href="{% static 'authenticate/login.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="content-login">
+        {% if user.is_authenticated %}
+            <div class="already-login-alert">
+                あなたは{{ user.username }}としてログインしています。
+            </div>
+        {% endif %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for form_field in form %}
+                <div class="form-group">
+                    <label for="{{ form_field.id_for_label }}">{{ form_field.label_tag }}</label>
+                    {{ form_field }}
+                    {{ form_field.errors }}
+                </div>
+            {% endfor %}
+            <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="ログイン"/>
+        </form>
+    </div>
+{% endblock %}
