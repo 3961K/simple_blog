@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'axes',
     'authenticate',
+    'articles',
 ]
 
 AUTHENTICATION_BACKENDS = [
