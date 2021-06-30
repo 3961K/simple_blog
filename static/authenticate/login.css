@@ -1,0 +1,22 @@
+li {
+    list-style: none;
+}
+
+body {
+    background-color: #ffffff;
+}
+
+.content-login {
+    margin : 25% ;
+    padding : 2% ;
+    border : 0.5px solid #cccccc ;
+    border-radius: 1em;
+    background-color: #ffffff;
+}
+
+.form-group label {
+    margin-top: 5px;
+    margin-right: 10px;
+    width: 100px;
+    float: left;
+}
