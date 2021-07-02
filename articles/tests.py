@@ -381,3 +381,30 @@ class PostCommentView(TestCase):
             self.client.post(reverse('articles:comments',
                                      kwargs={'pk': article.pk}),
                              comment_data, format='text/html')
+
+
+class ArticleViewTest(TestCase):
+    # 表示する記事を作成
+    @ classmethod
+    def setUpClass(cls):
+        User.objects.create_user(username='article_view',
+                                 email='article_view@test.com',
+                                 password='art1clev1ew')
+        for i in range(1, 6):
+            Article.objects.create(author_id=User.objects.first().pk,
+                                   title='test_title{}'.format(i),
+                                   content='test_content{}'.format(i))
+        return super().setUpClass()
+
+    # 存在する記事へアクセスする事が出来る
+    def test_success_access_page(self):
+        for article in Article.objects.all():
+            response = self.client.get(reverse('articles:article',
+                                               kwargs={'pk': article.pk}))
+            self.assertEqual(response.status_code, 200)
+
+    # 存在しない記事へはアクセスする事が出来ない
+    def test_fail_access_notexist_page(self):
+        response = self.client.get(reverse('articles:article',
+                                           kwargs={'pk': 6}))
+        self.assertEqual(response.status_code, 404)

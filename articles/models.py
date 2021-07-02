@@ -51,9 +51,6 @@ class Article(models.Model):
         True : bool
             userが認証されており,かつfavorite_usersに含まれている
         """
-        if not isinstance(user, User):
-            raise TypeError('user is not User class instance')
-
         if (not user.is_authenticated
                 or not self.favorite_users.filter(pk=user.pk).exists()):
             return False

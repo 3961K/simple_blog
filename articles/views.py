@@ -4,6 +4,7 @@ from django.http import HttpResponseBadRequest
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import FormView, CreateView, DetailView
+from django.shortcuts import render
 
 from .forms import FavoriteArticleForm, PostCommentForm
 from .models import Article
@@ -13,9 +14,39 @@ from .models import Article
 User = get_user_model()
 
 
-class ArticleView(DetailView):
-    # PostCommentView作成後に実装する
-    pass
+class ArticleView (DetailView):
+    template_name = 'articles/article.html'
+    model = Article
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['comment_form'] = PostCommentForm
+
+        context['favorite_form'] = FavoriteArticleForm
+        # 既にお気に入り登録しているか否かでボタンに表示する値ととお気に入りフォームのvalue
+        # に設定される状態を示す文字列を決定する
+        context['favorite_button_value'] = '☆' \
+            if self.object.is_favorited(self.request.user) else '★'
+        context['favorite_status'] = 'favorited' \
+            if self.object.is_favorited(self.request.user) else 'notfavorited'
+
+        return context
+
+    def get(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return super().get(request, *args, **kwargs)
+
+        # 認証ユーザの場合はFavoriteArticleFormに現在のユーザ名を設定
+        username = self.request.user.username
+        initial_form_dict = dict(username=username)
+        favorite_form = FavoriteArticleForm(request.GET or None,
+                                            initial=initial_form_dict)
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        context['favorite_form'] = favorite_form
+
+        return render(request, self.template_name, context)
 
 
 class PostCommentView(LoginRequiredMixin, CreateView):
