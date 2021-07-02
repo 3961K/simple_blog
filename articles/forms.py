@@ -1,7 +1,23 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
+from .models import Comment
+
 User = get_user_model()
+
+
+class PostCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('content',)
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 5, 'cols': 30}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
 
 
 class FavoriteArticleForm(forms.Form):

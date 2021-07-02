@@ -2,15 +2,41 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseBadRequest
 from django.http.response import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.views.generic import FormView
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import FormView, CreateView, DetailView
 
-from .forms import FavoriteArticleForm
+from .forms import FavoriteArticleForm, PostCommentForm
 from .models import Article
 
 # Create your views here.
 
 User = get_user_model()
+
+
+class ArticleView(DetailView):
+    # PostCommentView作成後に実装する
+    pass
+
+
+class PostCommentView(LoginRequiredMixin, CreateView):
+    template_name = ''
+    form_class = PostCommentForm
+
+    def form_valid(self, form):
+        article_id = self.kwargs['pk']
+        article = get_object_or_404(Article, pk=article_id)
+        author = User.objects.get(pk=self.request.user.pk)
+
+        comment = form.save(commit=False)
+        comment.article = article
+        comment.comment_author = author
+        comment.save()
+        return redirect('articles:article', pk=article_id)
+
+    # GETリクエストされた場合はとりあえずリダイレクトさせる
+    def get(self, request, *args, **kwargs):
+        article_id = self.kwargs['pk']
+        return redirect('articles:article', pk=article_id)
 
 
 class FavoriteArticleView(LoginRequiredMixin, FormView):
