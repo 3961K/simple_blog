@@ -1,9 +1,24 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from .models import Comment
+from .models import Comment, Tag
 
 User = get_user_model()
+
+
+class SearchArticleForm(forms.Form):
+    keyword = forms.CharField(max_length=100, required=False)
+
+    all_article_tag = Tag.objects.order_by('pk').all()
+    TAG_CHOICES = [(article_tag.pk, article_tag.tag)
+                   for article_tag in all_article_tag]
+    TAG_CHOICES.insert(0, ('all', '全てのタグ'))
+    tag = forms.ChoiceField(choices=TAG_CHOICES, required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
 
 
 class PostCommentForm(forms.ModelForm):

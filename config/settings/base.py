@@ -126,9 +126,7 @@ AUTH_USER_MODEL = 'authenticate.User'
 
 LOGIN_URL = 'authenticate:login'
 
-# 後で変更する
-LOGIN_REDIRECT_URL = 'authenticate:login'
-LOGIN_REDIRECT_URL = 'authenticate:login'
-LOGOUT_REDIRECT_URL = 'authenticate:login'
+LOGIN_REDIRECT_URL = 'articles:articles'
+LOGOUT_REDIRECT_URL = 'articles:articles'
 
 AXES_ONLY_USER_FAILURES = True

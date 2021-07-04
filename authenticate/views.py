@@ -21,7 +21,7 @@ class LogoutView(LogoutView):
 class RegisterView(CreateView):
     template_name = 'authenticate/register.html'
     form_class = RegisterForm
-    success_url = reverse_lazy('authenticate:login')     # 後で変更する
+    success_url = reverse_lazy('articles:articles')
 
     def form_valid(self, form):
         user = form.save()

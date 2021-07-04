@@ -1,0 +1,31 @@
+li {
+    list-style: none;
+}
+
+.search-form {
+    margin-top: 2.5%;
+    margin-left: 57.5px;
+}
+
+.search-form li {
+    padding-right: 5px;
+    float: left;
+}
+
+.article {
+    margin-top: 1.25%;
+    margin-bottom: 2.5%;
+}
+
+.article li {
+    margin-left: 15px;
+}
+
+.article-title a {
+    color: grey;
+    text-decoration: none;
+}
+
+.pagination {
+    margin-left: 45%;
+}

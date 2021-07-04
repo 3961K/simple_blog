@@ -1,20 +1,85 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseBadRequest
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
+from django.http import Http404, HttpResponseBadRequest
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import FormView, CreateView, DetailView
+from django.views.generic import FormView, CreateView, DetailView, ListView
 from django.shortcuts import render
 
-from .forms import FavoriteArticleForm, PostCommentForm
-from .models import Article
+
+from .forms import FavoriteArticleForm, PostCommentForm, SearchArticleForm
+from .models import Article, Tag
 
 # Create your views here.
 
 User = get_user_model()
 
 
-class ArticleView (DetailView):
+class ArticleListView(ListView):
+    template_name = 'articles/articles.html'
+    model = Article
+    paginate_by = 5
+
+    def fetch_get_parameter(self, parameter_name):
+        if type(parameter_name) is not str or parameter_name == "":
+            raise KeyError("request url is not include {}".format(parameter_name))
+
+        if parameter_name not in self.request.GET:
+            raise KeyError("request url is not include {}".format(parameter_name))
+
+        return self.request.GET.get(parameter_name)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        # キーワードをURLパラメータから抽出
+        try:
+            keyword = self.fetch_get_parameter("keyword")
+            queryset = queryset.filter(Q(title__contains=keyword)
+                                       | Q(content__contains=keyword))
+        except KeyError:
+            pass
+
+        # tagをURLパラメータから抽出
+        try:
+            tag_pk = self.fetch_get_parameter("tag")
+        except KeyError:
+            # タグが存在しない場合は現時点での条件のクエリセットを返す
+            return queryset
+
+        # tagがallである場合は現時点でのクエリセットを返す
+        if tag_pk == 'all':
+            return queryset
+
+        # タグオブジェクトを取得する
+        # 存在しないタグの場合は,存在しないタグのpkを指定したクエリセットを返す
+        try:
+            tag = Tag.objects.get(pk__in=tag_pk)
+        except ValueError:
+            queryset = queryset.filter(tags=-1)
+            return queryset
+        except ObjectDoesNotExist:
+            queryset = queryset.filter(tags=-1)
+            return queryset
+
+        queryset = queryset.filter(tags=tag)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # 記事一覧を取得する,検索結果が何も無い場合は 404 を返す
+        article_list = context['article_list']
+        if article_list.first() is None:
+            raise Http404('指定したキーワードとタグを含む記事は存在しませんでした')
+
+        context['form'] = SearchArticleForm
+        return context
+
+
+class ArticleView(DetailView):
     template_name = 'articles/article.html'
     model = Article
 

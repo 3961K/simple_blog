@@ -15,7 +15,7 @@
                 <li class="relation"><b>フォロー</b> <br> {{ article.author.followees.all|length }} </li>
                 <li class="relation"><b>フォワロー</b> <br> {{ article.author.followers.all|length }} </li>
             </ul>
-        </div>    
+        </div>
 
         <main class="article-content">
             <div class="article-title">
@@ -25,7 +25,7 @@
             <div class="article-tags">
                 <ul>
                     {% for tag in article.tags.all %}
-                        <li><a class="btn btn-outline-success my-2 my-sm-0" href="#">{{ tag }}</a></li>
+                        <li><a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'articles:articles'%}?tag={{ tag.pk }}">{{ tag }}</a></li>
                     {% endfor %}
                 </ul>    
             </div>
