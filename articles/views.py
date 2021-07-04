@@ -91,8 +91,8 @@ class ArticleView(DetailView):
         context['favorite_form'] = FavoriteArticleForm
         # 既にお気に入り登録しているか否かでボタンに表示する値ととお気に入りフォームのvalue
         # に設定される状態を示す文字列を決定する
-        context['favorite_button_value'] = '☆' \
-            if self.object.is_favorited(self.request.user) else '★'
+        context['favorite_button_value'] = '★' \
+            if self.object.is_favorited(self.request.user) else '☆'
         context['favorite_status'] = 'favorited' \
             if self.object.is_favorited(self.request.user) else 'notfavorited'
 
