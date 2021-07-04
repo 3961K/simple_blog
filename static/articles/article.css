@@ -1,0 +1,83 @@
+ul li {
+    list-style: none;
+}
+
+.article-entire {
+    width: 100%;
+    display: flex;
+}
+
+.article-author-profile {
+    width: 25%;
+    height: 100%;
+    margin : 1%;
+    padding-top: 2%;
+    border : 0.5px solid #ffffff ;
+    border-radius: 1em;
+    background-color: #fafafa;
+}
+
+.article-author-profile li.relation {
+    padding-right: 1%;
+    float: left;
+}
+
+.article-content {
+    width: 75%;
+    display: block;
+    margin : 1%;
+    padding : 2%;
+    border : 0.5px solid #ffffff ;
+    border-radius: 1em;
+    background-color: #fafafa;
+}
+
+.article-title {
+    margin-left: 5%;
+}
+
+.article-title .title-sentence {
+    font-size: 200%;
+    word-break : break-all;
+}
+
+.article-tags {
+    margin-left: 1%;
+    margin-bottom: 10%;
+}
+
+.article-tags li {
+    padding-right: 1%;
+    float: left;
+}
+
+.article-sentence {
+    margin-left : 5%;
+    margin-right : 15%;
+    word-break : break-word;
+}
+
+.article-favorite {
+    margin-left: 5%;
+    padding-left: 67.5%;
+}
+
+.article-comments {
+    margin-left : 5% ;
+    margin-top: 1.75%;
+}
+
+.require-login-message {
+    margin-top: 4.25%;
+}
+
+.comment-postform textarea {
+    width: 75%;
+    height: 25%;
+}
+
+
+.article-comment {
+    margin-top: 4.5%;
+    margin-left: -4.5%
+}

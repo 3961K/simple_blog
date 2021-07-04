@@ -1,0 +1,79 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_header %}
+<link rel="stylesheet" href="{% static 'articles/article.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="article-entire">
+        <div class="article-author-profile">
+            <ul>
+                <li><img src="/media/{{ article.author.icon }}" style="border-radius: 50px; width: 50px; height: 50px;"></li>
+                <li><b>ユーザ名:</b> {{ article.author.username }}</li>
+                <li><b>プロフィール:</b> <br>{{ article.author.profile_message }}</li>
+                <li class="relation"><b>フォロー</b> <br> {{ article.author.followees.all|length }} </li>
+                <li class="relation"><b>フォワロー</b> <br> {{ article.author.followers.all|length }} </li>
+            </ul>
+        </div>
+
+        <main class="article-content">
+            <div class="article-title">
+                <p class="title-sentence">{{ article.title }}</p>
+            </div>
+
+            <div class="article-tags">
+                <ul>
+                    {% for tag in article.tags.all %}
+                        <li><a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'articles:articles'%}?tag={{ tag.pk }}">{{ tag }}</a></li>
+                    {% endfor %}
+                </ul>    
+            </div>
+
+            <div class="article-sentence">
+                {{ article.content }}
+            </div>
+
+            <div class="article-favorite">
+                {% if user.is_authenticated %}
+                    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+                    <script src="{% static 'articles/favorite.js' %}" defer></script>
+                    <form name="favorite" action="{% url 'articles:favorite' article.pk %}" method="POST">
+                        {% csrf_token %}
+                        {{ favorite_form.username }}
+                        <h3><input id="favorite_button" type="submit" value="{{ favorite_button_value }}" message-status="{{ favorite_status }}" style="border:0px; color: orange; background-color:#fafafa"/></h3>
+                    </form>
+                {% endif %}
+            </div>
+
+            <div class="article-comments">
+                <div class="comment-post-form">
+                    {% if user.is_authenticated %}
+                        <form class="comment-postform" action="{% url 'articles:comments' article.pk %}"  method="POST">
+                            {% csrf_token %}
+                            {{ comment_form.non_field_errors }}
+                            {% for comment_form_field in comment_form %}
+                                <div class="form-group">
+                                    {{ comment_form_field }}
+                                    {{ comment_form_field.errors }}
+                                </div>
+                            {% endfor %}
+                            <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="コメント投稿"/>
+                        </form>
+                    {% else %}
+                        <p class="require-login-message">ログインするとコメントする事が出来ます</p>
+                    {% endif %}
+                </div>
+
+                <div class="comments">
+                    {% for comment in article.comment_set.all %}
+                        <ul class="article-comment">
+                            <li class="comment-author-icon"><img src="/media/{{ comment.comment_author.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"> {{ comment.comment_author.username }} {{ comment.create_data }}</li>
+                            <li class="comment-content">{{ comment.content }}</li>
+                        </ul>
+                    {% endfor %}
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}
