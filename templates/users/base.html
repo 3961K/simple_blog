@@ -4,8 +4,8 @@
             <li><img src="/media/{{ user.icon }}" style="border-radius: 50px; width: 50px; height: 50px;"></li>
             <li><b>ユーザ名:</b> {{ user.username }}</li>
             <li><b>プロフィール:</b> <br>{{ user.profile_message|slice:":30" }}</li>
-            <li class="relation"><a href="{% url 'users:followees' user.username %}"><b>フォロー</b></a> <br> {{ user.followees.all|length }} </li>
-            <li class="relation"><b>フォワロー</b> <br> {{ user.followers.all|length }} </li>
+            <li class="relation"><a href="{% url 'users:followees' user.username %}"><b>Follow</b></a> <br> {{ user.followees.all|length }} </li>
+            <li class="relation"><a href="{% url 'users:followers' user.username %}"><b>Follower</b></a> <br> {{ user.followers.all|length }} </li>
         </ul>    
     </div>
 

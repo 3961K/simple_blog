@@ -109,7 +109,7 @@ class FavoriteListViewTest(TestCase):
         self.assertEqual(response.status_code, 404)
 
 
-class FolloweesList(TestCase):
+class FolloweeListViewTest(TestCase):
     @classmethod
     def setUpClass(cls):
         for i in range(1, 11):
@@ -152,5 +152,52 @@ class FolloweesList(TestCase):
     def test_fail_access_page_over(self):
         response = self.client.get(''.join([reverse('users:followees',
                                            kwargs={'username': 'followee_tester_1'}),
+            '?', urlencode(dict(page='6'))]))
+        self.assertEqual(response.status_code, 404)
+
+
+class FollowerListViewTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        for i in range(1, 11):
+            User.objects.create_user(username='follower_tester_{}'.format(i),
+                                     email='follower_tester_{}@test.com'.format(i),
+                                     password='f0ll0wertester')
+
+        user1 = User.objects.filter(username='follower_tester_1').get()
+        for i in range(2, 11):
+            follower = User.objects.filter(username='follower_tester_{}'.format(i)).get()
+            Relation.objects.create(followee=user1, follower=follower)
+
+        return super().setUpClass()
+
+    # favorite_list_viewユーザのプロフィールにアクセスする事が出来る
+    def test_success_access_page(self):
+        response = self.client.get(reverse('users:followers',
+                                           kwargs={'username': 'follower_tester_1'}))
+        self.assertEqual(response.status_code, 200)
+
+    # 存在しないユーザ名のプロフィールにアクセスしようとすると404が返される
+    def test_fail_access_page(self):
+        response = self.client.get(reverse('users:followers',
+                                           kwargs={'username': 'not_exist'}))
+        self.assertEqual(response.status_code, 404)
+
+    # /?page=1・/?page=2にアクセスする事が出来る
+    def test_success_access_page12(self):
+        response = self.client.get(''.join([reverse('users:followers',
+                                           kwargs={'username': 'follower_tester_1'}),
+            '?', urlencode(dict(page='1'))]))
+        self.assertEqual(response.status_code, 200)
+
+        response2 = self.client.get(''.join([reverse('users:followers',
+                                             kwargs={'username': 'follower_tester_1'}),
+                                             '?', urlencode(dict(page='2'))]))
+        self.assertEqual(response2.status_code, 200)
+
+    # /?page=6(存在しないページ)にアクセスする事が出来ない
+    def test_fail_access_page_over(self):
+        response = self.client.get(''.join([reverse('users:followers',
+                                           kwargs={'username': 'follower_tester_1'}),
             '?', urlencode(dict(page='6'))]))
         self.assertEqual(response.status_code, 404)

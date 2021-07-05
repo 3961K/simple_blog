@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_header %}
-    <link rel="stylesheet" href="{% static 'users/relations.css' %}">
+    <link rel="stylesheet" href="{% static 'users/followers.css' %}">
     <link rel="stylesheet" href="{% static 'users/base.css' %}">
 {% endblock %}
 
@@ -10,14 +10,14 @@
     <div class="user-profile-entire">
         {% include 'users/base.html' %}
 
-        <div class="followees">
+        <div class="followers">
             {% for relation in relation_list %}
-                <div class="followee">
+                <div class="follower">
                     <ul>
-                        <li class="followee-icon"><img src="/media/{{ relation.followee.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"></li>
-                        <li class="followee-username"><a href="{% url 'users:articles' relation.followee.username %}"> {{ relation.followee.username }} </a></li>
-                        <li class="relation"><b>Follow</b> <br> {{ relation.followee.followees.all|length }} </li>
-                        <li class="relation"><b>Follower</b> <br> {{ relation.followee.followers.all|length }} </li>            
+                        <li class="follower-icon"><img src="/media/{{ relation.follower.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"></li>
+                        <li class="follower-username"><a href="{% url 'users:articles' relation.follower.username %}"> {{ relation.follower.username }} </a></li>
+                        <li class="relation"><b>Follow</b> <br> {{ relation.follower.followees.all|length }} </li>
+                        <li class="relation"><b>Follower</b> <br> {{ relation.follower.followers.all|length }} </li>            
                     </li>
                 </div>
             {% endfor %}
