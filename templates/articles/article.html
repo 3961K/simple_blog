@@ -10,10 +10,10 @@
         <div class="article-author-profile">
             <ul>
                 <li><img src="/media/{{ article.author.icon }}" style="border-radius: 50px; width: 50px; height: 50px;"></li>
-                <li><b>ユーザ名:</b> {{ article.author.username }}</li>
+                <li><b>ユーザ名:</b> <a href="{% url 'users:articles' article.author.username %}">{{ article.author.username }}</a></li>
                 <li><b>プロフィール:</b> <br>{{ article.author.profile_message }}</li>
-                <li class="relation"><b>フォロー</b> <br> {{ article.author.followees.all|length }} </li>
-                <li class="relation"><b>フォワロー</b> <br> {{ article.author.followers.all|length }} </li>
+                <li class="relation"><b> Follow </b> <br> {{ article.author.followees.all|length }} </li>
+                <li class="relation"><b> Follower</b> <br> {{ article.author.followers.all|length }} </li>
             </ul>
         </div>
 
@@ -68,7 +68,7 @@
                 <div class="comments">
                     {% for comment in article.comment_set.all %}
                         <ul class="article-comment">
-                            <li class="comment-author-icon"><img src="/media/{{ comment.comment_author.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"> {{ comment.comment_author.username }} {{ comment.create_data }}</li>
+                            <li class="comment-author-icon"><img src="/media/{{ comment.comment_author.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"> <a href="{% url 'users:articles' comment.comment_author.username %}">{{ comment.comment_author.username }}</a> {{ comment.create_data }}</li>
                             <li class="comment-content">{{ comment.content }}</li>
                         </ul>
                     {% endfor %}

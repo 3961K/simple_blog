@@ -2,6 +2,16 @@ ul li {
     list-style: none;
 }
 
+a {
+    color: grey;
+    text-decoration: none;
+}
+
+a:hover {
+    color: grey;
+    text-decoration: none;
+}
+
 .article-entire {
     width: 100%;
     display: flex;
