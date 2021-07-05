@@ -1,0 +1,84 @@
+ul li {
+    list-style: none;
+}
+
+a {
+    color: grey;
+    text-decoration: none;
+}
+
+.user-profile-entire {
+    width: 100%;
+}
+
+.user-profile {
+    width: 25%;
+    height: 100%;
+    margin : 1%;
+}
+
+li.relation {
+    padding-right: 1%;
+    float: left;
+}
+
+.user-profile1 {
+    padding-top: 12.5%;
+    padding-bottom: 25%;
+    border : 0.5px solid #ffffff ;
+    border-radius: 1em;
+    background-color: #fafafa;
+}
+
+.user-profile2 {
+    margin-top: 12.5%;
+    padding-top: 7.25%;
+    border : 0.5px solid #ffffff ;
+    border-radius: 1em;
+    background-color: #fafafa;
+}
+
+.followers {
+    width: 75%;
+    margin : 1%;
+    padding-left: 10%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.follower {
+    width: 33%;
+    height: 150px;
+    margin-top: 2%;
+    margin-right: 2%;
+    padding-top: 2%;
+    padding-left: -5%;
+    border : 0.5px solid #ffffff ;
+    border-radius: 1em;
+    background-color: #fafafa;
+}
+
+.follower:hover {
+    background-color: #aaaaaa;
+}
+
+.follower li {
+    padding-bottom: 1.5%;
+}
+
+.follower li.relation {
+    padding-right: 5%;
+}
+
+.posted-articles .article {
+    padding-top: 2.5%;
+}
+
+.pagination {
+    margin-left: 25%;
+    padding-left: 12.5%;
+}
+
+.follower-profile {
+    word-break : break-all;
+}

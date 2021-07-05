@@ -59,7 +59,7 @@ class FavoriteListView(ListView):
 
 
 class FolloweeListView(ListView):
-    template_name = 'users/relations.html'
+    template_name = 'users/followees.html'
     model = Relation
     paginate_by = 8
 
@@ -70,6 +70,30 @@ class FolloweeListView(ListView):
             raise Http404("そのユーザは存在しません")
 
         return self.model.objects.filter(follower=user).select_related('followee').order_by('followee__username')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        try:
+            context['user'] = User.objects.get(username=self.kwargs['username'])
+        except ObjectDoesNotExist:
+            raise Http404("そのユーザは存在しません")
+
+        return context
+
+
+class FollowerListView(ListView):
+    template_name = 'users/followers.html'
+    model = Relation
+    paginate_by = 8
+
+    def get_queryset(self, *args, **kwargs):
+        try:
+            user = User.objects.get(username=self.kwargs['username'])
+        except ObjectDoesNotExist:
+            raise Http404("そのユーザは存在しません")
+
+        return self.model.objects.filter(followee=user).select_related('follower').order_by('follower__username')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
