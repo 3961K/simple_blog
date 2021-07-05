@@ -2,7 +2,9 @@
 {% load static %}
 
 {% block extra_header %}
-    <link rel="stylesheet" href="{% static 'users/favorites.css' %}">
+    {% if article_list %}
+        <link rel="stylesheet" href="{% static 'users/favorites.css' %}">
+    {% endif %}
     <link rel="stylesheet" href="{% static 'users/base.css' %}">
 {% endblock %}
 
@@ -21,6 +23,7 @@
                 {% endfor %}
             </ul>
     
+            {% if article_list %}
             <ul class="pagination">
                 {% if page_obj.has_previous %}
                     <li class="page-item">
@@ -45,7 +48,8 @@
                         </a>
                     </li>
                 {% endif %}
-            </ul> 
+            </ul>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
