@@ -1,0 +1,25 @@
+ul li {
+    list-style: none;
+}
+
+.posted-articles {
+    width: 75%;
+    display: block;
+    margin : 1%;
+    padding : 2%;
+    border : 0.5px solid #ffffff ;
+    border-radius: 1em;
+    background-color: #fafafa;
+}
+
+.posted-articles .article {
+    padding-top: 2.5%;
+}
+
+.posted-articles .pagination {
+    padding-left: 50%;
+}
+
+.article-title {
+    word-break : break-all;
+}
