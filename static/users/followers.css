@@ -48,7 +48,7 @@ li.relation {
 
 .follower {
     width: 33%;
-    height: 150px;
+    height: 200px;
     margin-top: 2%;
     margin-right: 2%;
     padding-top: 2%;
@@ -62,12 +62,9 @@ li.relation {
     background-color: #aaaaaa;
 }
 
-.follower li {
+.follower ul li {
+    padding-right: 15%;
     padding-bottom: 1.5%;
-}
-
-.follower li.relation {
-    padding-right: 5%;
 }
 
 .posted-articles .article {

@@ -6,6 +6,10 @@
         <link rel="stylesheet" href="{% static 'users/articles.css' %}">
     {% endif %}
     <link rel="stylesheet" href="{% static 'users/base.css' %}">
+    {% if user.is_authenticated %}
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous" defer></script>
+        <script src="{% static 'users/follow.js' %}" defer></script>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -16,7 +20,7 @@
             <ul>
                 {% for article in article_list %}
                     <ul class="article">
-                        <li class="author-info"><img src='/media/{{ user.icon }}' style='border-radius: 50px; width: 25px; height: 25px;'> {{ user.username }}が{{ article.create_date }}に投稿</li>
+                        <li class="author-info"><img src='/media/{{ profile_user.icon }}' style='border-radius: 50px; width: 25px; height: 25px;'> {{ profile_user.username }}が{{ article.create_date }}に投稿</li>
                         <li class="article-title"><a href='{% url "articles:article" article.pk %}'> {{ article.title }} </a></li>
                         <li class="article-content">{{ article.content|slice:":30" }} ... </li>
                     </ul>

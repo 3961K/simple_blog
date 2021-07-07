@@ -1,18 +1,33 @@
 <div class="user-profile">
     <div class="user-profile1">
         <ul>
-            <li><img src="/media/{{ user.icon }}" style="border-radius: 50px; width: 50px; height: 50px;"></li>
-            <li><b>ユーザ名:</b> {{ user.username }}</li>
-            <li><b>プロフィール:</b> <br>{{ user.profile_message|slice:":30" }}</li>
-            <li class="relation"><a href="{% url 'users:followees' user.username %}"><b>Follow</b></a> <br> {{ user.followees.all|length }} </li>
-            <li class="relation"><a href="{% url 'users:followers' user.username %}"><b>Follower</b></a> <br> {{ user.followers.all|length }} </li>
-        </ul>    
+            <li><img src="/media/{{ profile_user.icon }}" style="border-radius: 50px; width: 50px; height: 50px;"></li>
+            <li><b>ユーザ名:</b> {{ profile_user.username }}</li>
+
+            {% if user.is_authenticated %}
+            {% load is_follow %}
+            {% is_follow user relation.followee as follow_status %}
+            <form name="follow" action="{% url 'users:follow' profile_user.username %}" method="POST">
+                {% csrf_token %}
+                {{ follow_form.follower }}
+                {% if follow_status %}
+                    <input class="btn btn-info" name="follow_button" type="submit" value="フォロー中"/>
+                {% else %}
+                    <input class="btn btn-info" name="follow_button" type="submit" value="フォローする"/>
+                {% endif %}
+            </form>
+            {% endif %}
+
+            <li><b>プロフィール:</b> <br>{{ profile_user.profile_message|slice:":30" }}</li>
+            <li class="relation"><a href="{% url 'users:followees' profile_user.username %}"><b>Follow</b></a> <br> {{ profile_user.followees.all|length }} </li>
+            <li class="relation"><a href="{% url 'users:followers' profile_user.username %}"><b>Follower</b></a> <br> {{ profile_user.followers.all|length }} </li>
+        </ul>
     </div>
 
     <div class="user-profile2">
         <ul>
-            <li><a href="{% url 'users:articles' user.username %}">投稿記事一覧</a></li>
-            <li><a href="{% url 'users:favorites' user.username %}">お気に入り記事一覧</a></li>
+            <li><a href="{% url 'users:articles' profile_user.username %}">投稿記事一覧</a></li>
+            <li><a href="{% url 'users:favorites' profile_user.username %}">お気に入り記事一覧</a></li>
         </ul>
     </div>
 </div>
