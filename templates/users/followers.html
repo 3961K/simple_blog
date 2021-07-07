@@ -21,7 +21,7 @@
                         <li class="follower-icon"><img src="/media/{{ relation.follower.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"></li>
                         <li class="follower-username"><a href="{% url 'users:articles' relation.follower.username %}"> {{ relation.follower.username }} </a></li>
 
-                        {% if user.is_authenticated %}
+                        {% if user.is_authenticated and user.username != relation.follower.username %}
                             {% load is_follow %}
                             {% is_follow user relation.follower as follow_status %}
                             <form name="follow" action="{% url 'users:follow' relation.follower.username %}" method="POST">

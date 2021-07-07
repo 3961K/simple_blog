@@ -174,6 +174,10 @@ class FollowView(LoginRequiredMixin, FormView):
         followee_name = self.kwargs['username']
         followee = get_object_or_404(User, username=followee_name)
 
+        # フォロー・アンフォローしようとする対象とそれを行うユーザが同一でないか確認する
+        if followee_name == follower_name:
+            raise HttpResponseBadRequest()
+
         # followerとfolloweeによるRelationオブジェクトが既に存在する場合(フォロー中)は
         # 削除(フォロー解除)し,存在しない場合は作成する(フォローする)
         status = ''
