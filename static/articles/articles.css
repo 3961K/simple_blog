@@ -2,6 +2,16 @@ li {
     list-style: none;
 }
 
+a {
+    color: grey;
+    text-decoration: none;
+}
+
+a:hover {
+    color: grey;
+    text-decoration: none;
+}
+
 .search-form {
     margin-top: 2.5%;
     margin-left: 57.5px;
@@ -19,11 +29,6 @@ li {
 
 .article li {
     margin-left: 15px;
-}
-
-.article-title a {
-    color: grey;
-    text-decoration: none;
 }
 
 .pagination {
