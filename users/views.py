@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseBadRequest
 from django.http.response import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, FormView
 
 
@@ -59,7 +59,7 @@ class FavoriteListView(ListView):
         except ObjectDoesNotExist:
             raise Http404("そのユーザは存在しません")
 
-        return self.model.objects.filter(favorite_users=user)
+        return self.model.objects.filter(favorite_users=user).select_related('author')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -173,6 +173,10 @@ class FollowView(LoginRequiredMixin, FormView):
         # フォロー・アンフォロー対象のユーザ名を取得
         followee_name = self.kwargs['username']
         followee = get_object_or_404(User, username=followee_name)
+
+        # フォロー・アンフォローしようとする対象とそれを行うユーザが同一でないか確認する
+        if followee_name == follower_name:
+            raise HttpResponseBadRequest()
 
         # followerとfolloweeによるRelationオブジェクトが既に存在する場合(フォロー中)は
         # 削除(フォロー解除)し,存在しない場合は作成する(フォローする)
