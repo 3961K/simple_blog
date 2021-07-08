@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 User = get_user_model()
@@ -21,6 +22,13 @@ class UpdateEmailForm(forms.ModelForm):
         model = User
         fields = ['email']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
+
+
+class UpdatePasswordForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():

@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, ListView
 
-from .forms import UpdateUsernameForm, UpdateEmailForm
+from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm
 from users.forms import FollowForm
 from authenticate.models import Relation
 
@@ -74,3 +75,9 @@ class UpdateFollowerView(LoginRequiredMixin, ListView):
         context['follow_form'] = follow_form
 
         return context
+
+
+class UpdatePasswordView(LoginRequiredMixin, PasswordChangeView):
+    template_name = 'settings/password.html'
+    form_class = UpdatePasswordForm
+    success_url = reverse_lazy('settings:username')
