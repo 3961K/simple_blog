@@ -2,20 +2,13 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from .forms import UpdateUsernameForm
+from .forms import UpdateUsernameForm, UpdateEmailForm
 
 # Create your tests here.
 User = get_user_model()
 
 
 class UpdateUsernameFormTest(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        User.objects.create_user(username='uuf_tester',
-                                 email='uuf_test@test.com',
-                                 password='uuftester0512')
-        return super().setUpClass()
-
     # 30文字以内の文字列はユーザ名として妥当である
     def test_valid(self):
         correct_data = {
@@ -94,3 +87,84 @@ class UpdateUsernameViewTest(TestCase):
         # メールアドレスが同一であるかによってユーザ名が変更されたか確認する
         user = User.objects.get(username='uuv_tester3')
         self.assertEquals(user.email, 'uuv_test@test.com')
+
+
+class UpdateEmailFormTest(TestCase):
+    # 一般的なメールアドレスに近しい文字列はメールアドレスとして妥当である
+    def test_valid(self):
+        correct_data = {
+            'email': 'ueftest@test.com'
+        }
+        form = UpdateEmailForm(correct_data)
+        self.assertTrue(form.is_valid())
+
+    # 一般的なメールアドレスからかけ離れている文字列と空文字はメールアドレスとして妥当である
+    def test_invalid(self):
+        wrong_data_list = [
+            {
+                'email': 'A'
+            },
+            {
+                'email': ''
+            }
+        ]
+
+        for wrong_data in wrong_data_list:
+            form = UpdateEmailForm(wrong_data)
+            self.assertFalse(form.is_valid())
+
+
+class UpdateEmailViewTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        User.objects.create_user(username='uev_tester',
+                                 email='uevtest@test.com',
+                                 password='uevtester0512')
+        User.objects.create_user(username='uev_tester2',
+                                 email='uevtest2@test.com',
+                                 password='uevtester0512')
+        return super().setUpClass()
+
+    # ログインしていない場合は302が返される
+    def test_redirect_nologin(self):
+        response = self.client.get(reverse('settings:email'))
+        self.assertEqual(response.status_code, 302)
+
+    # ログインしている場合は200を返される
+    def test_success_access(self):
+        user = User.objects.get(username='uev_tester')
+        self.client.force_login(user)
+        response = self.client.get(reverse('settings:email'))
+        self.assertEqual(response.status_code, 200)
+
+    # 既存のメールアドレスでは更新する事が出来ない
+    def test_fail_update_diplicated_username(self):
+        err_message = "この メールアドレス を持った ユーザー が既に存在します。"
+
+        user = User.objects.get(username='uev_tester')
+        self.client.force_login(user)
+
+        post_data = {
+            'email': 'uevtest2@test.com'
+        }
+        response = self.client.post(reverse('settings:email'),
+                                    post_data,
+                                    format='text/html')
+        self.assertContains(response, err_message)
+
+    # 新たなユーザ名によってユーザ名を更新する事が出来る
+    def test_success_update_username(self):
+        user = User.objects.get(username='uev_tester')
+        self.client.force_login(user)
+
+        post_data = {
+            'email': 'uevtest3@test.com'
+        }
+        response = self.client.post(reverse('settings:email'),
+                                    post_data,
+                                    format='text/html')
+        self.assertEqual(response.status_code, 302)
+
+        # ユーザ名が同一であるかによってがメールアドレス変更されたか確認する
+        user = User.objects.get(email='uevtest3@test.com')
+        self.assertEquals(user.username, 'uev_tester')

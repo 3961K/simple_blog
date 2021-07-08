@@ -14,3 +14,14 @@ class UpdateUsernameForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
+
+
+class UpdateEmailForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'

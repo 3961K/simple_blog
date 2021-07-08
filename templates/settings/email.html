@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_header %}
+<link rel="stylesheet" href="{% static 'settings/links.css' %}">
+<link rel="stylesheet" href="{% static 'settings/email.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="settings-entire">
+        {% include 'settings/links.html' %}
+
+        <div class="personalinfo-form">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                {% for form_field in form %}
+                    <div class="form-group">
+                        {{ form_field.errors }}
+                        <label for="{{ form_field.id_for_label }}">{{ form_field.label_tag }}</label>
+                        {{ form_field }}
+                    </div>
+                {% endfor %}
+                <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="変更"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}
