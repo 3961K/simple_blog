@@ -53,3 +53,24 @@ class UpdateFolloweeView(LoginRequiredMixin, ListView):
         context['follow_form'] = follow_form
 
         return context
+
+
+class UpdateFollowerView(LoginRequiredMixin, ListView):
+    template_name = 'settings/follower.html'
+    model = Relation
+    paginate_by = 8
+
+    def get_queryset(self, *args, **kwargs):
+        user = self.request.user
+        return self.model.objects.filter(followee=user).select_related('follower').order_by('follower__username')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # 自身のユーザ名をフォームに設定
+        username = self.request.user.username
+        initial_form_dict = dict(follower=username)
+        follow_form = FollowForm(initial=initial_form_dict)
+        context['follow_form'] = follow_form
+
+        return context
