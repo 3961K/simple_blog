@@ -25,6 +25,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/articles/')),
     path('authenticate/', include('authenticate.urls')),
     path('articles/', include('articles.urls')),
+    path('settings/', include('settings.urls')),
     path('users/', include('users.urls')),
 ]
 
