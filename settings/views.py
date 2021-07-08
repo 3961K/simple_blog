@@ -35,7 +35,7 @@ class UpdateEmailView(LoginRequiredMixin, UpdateView):
 
 
 class UpdateFolloweeView(LoginRequiredMixin, ListView):
-    template_name = 'settings/relation.html'
+    template_name = 'settings/followee.html'
     model = Relation
     paginate_by = 8
 
