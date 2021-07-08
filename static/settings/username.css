@@ -1,0 +1,27 @@
+ul li {
+    list-style: none;
+}
+
+a {
+    color: grey;
+    text-decoration: none;
+}
+
+a:hover {
+    color: grey;
+    text-decoration: none;
+}
+
+.personalinfo-form {
+    width: 50%;
+    border-radius: 1em;
+    background-color: #fafafa;
+    margin-top: 5%;
+    margin-left: 5%;
+    padding: 12.5%;
+    padding-left: 15%;
+}
+
+.form-group .errorlist li {
+    margin-left: -11.5%;
+}

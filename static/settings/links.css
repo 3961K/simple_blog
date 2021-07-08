@@ -1,0 +1,18 @@
+.settings-entire {
+    width: 100%;
+    display: flex;
+}
+
+.settings-links {
+    width: 22.5%;
+    height: 52.5%;
+    margin-top: 5%;
+    margin-left: 5%;
+    border : 0.5px solid #ffffff ;
+    border-radius: 1em;
+    background-color: #fafafa;
+}
+
+.settings-links ul li {
+    padding-top: 12.5%;
+}
