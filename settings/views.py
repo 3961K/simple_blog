@@ -1,9 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic.edit import UpdateView
+from django.views.generic import UpdateView, ListView
 
 from .forms import UpdateUsernameForm, UpdateEmailForm
+from users.forms import FollowForm
+from authenticate.models import Relation
 
 # Create your views here.
 
@@ -30,3 +32,24 @@ class UpdateEmailView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         user = self.request.user
         return User.objects.get(username=user.username)
+
+
+class UpdateFolloweeView(LoginRequiredMixin, ListView):
+    template_name = 'settings/relation.html'
+    model = Relation
+    paginate_by = 8
+
+    def get_queryset(self, *args, **kwargs):
+        user = self.request.user
+        return self.model.objects.filter(follower=user).select_related('followee').order_by('followee__username')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # 自身のユーザ名をフォームに設定
+        username = self.request.user.username
+        initial_form_dict = dict(follower=username)
+        follow_form = FollowForm(initial=initial_form_dict)
+        context['follow_form'] = follow_form
+
+        return context
