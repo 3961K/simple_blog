@@ -97,3 +97,12 @@ class CreateArticleView(LoginRequiredMixin, CreateView):
         article.save()
         form.save_m2m()
         return HttpResponseRedirect(self.success_url)
+
+
+class PostedArticleListView(LoginRequiredMixin, ListView):
+    template_name = 'settings/articles.html'
+    model = Article
+    paginate_by = 5
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(author=self.request.user)
