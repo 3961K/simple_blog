@@ -1,0 +1,43 @@
+ul li {
+    list-style: none;
+}
+
+a {
+    color: grey;
+    text-decoration: none;
+}
+
+a:hover {
+    color: grey;
+    text-decoration: none;
+}
+
+.newarticle-form {
+    width: 60%;
+    border-radius: 1em;
+    background-color: #fafafa;
+    margin-top: 5%;
+    margin-left: 5%;
+    padding-top: 5%;
+    padding-left: 5%;
+}
+
+.form-group label {
+    margin-top: 7px;
+    margin-right: 10px;
+    width: 200px;
+    float: left;
+}
+
+.form-group .errorlist li {
+    margin-left: -11.5%;
+}
+
+#id_tags li {
+    margin-left: 175px;
+}
+
+#post-button {
+    margin-top: 90%;
+    margin-left: 85%;
+}

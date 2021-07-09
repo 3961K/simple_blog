@@ -1,12 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView, ListView
+from django.views.generic import UpdateView, ListView, CreateView
 
-from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm
+from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, CreateArticleForm
 from users.forms import FollowForm
 from authenticate.models import Relation
+from articles.models import Article
 
 # Create your views here.
 
@@ -81,3 +83,17 @@ class UpdatePasswordView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'settings/password.html'
     form_class = UpdatePasswordForm
     success_url = reverse_lazy('settings:username')
+
+
+class CreateArticleView(LoginRequiredMixin, CreateView):
+    template_name = 'settings/newarticle.html'
+    form_class = CreateArticleForm
+    model = Article
+    success_url = reverse_lazy('settings:username')
+
+    def form_valid(self, form):
+        article = form.save(commit=False)
+        article.author = self.request.user
+        article.save()
+        form.save_m2m()
+        return HttpResponseRedirect(self.success_url)
