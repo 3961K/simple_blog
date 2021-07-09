@@ -3,7 +3,8 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from urllib.parse import urlencode
 
-from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, CreateArticleForm
+from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, \
+    CreateArticleForm, UpdateArticleForm
 from authenticate.models import Relation
 from articles.models import Article, Tag
 
@@ -494,3 +495,202 @@ class CreateArticleViewTest(TestCase):
                                              wrong_format_data,
                                              format='text/html')
             self.assertEqual(post_response.status_code, 200)
+
+
+@override_settings(AXES_ENABLED=False)
+class PostedArticleListView(TestCase):
+    # 表示する記事を作成
+    @classmethod
+    def setUpClass(cls):
+        User.objects.create_user(username='pavtester',
+                                 email='pavtester@test.com',
+                                 password='pavtester0123')
+        user = User.objects.get(username='pavtester')
+        for i in range(1, 7):
+            article = Article(author=user,
+                              title='test_title{}'.format(i),
+                              content='test_content{}'.format(i))
+            article.save()
+
+        return super().setUpClass()
+
+    # ログインしている状態でビューにアクセスする事が出来る
+    def test_success_access(self):
+        self.client.login(username='pavtester',
+                          password='pavtester0123')
+        response = self.client.get(reverse('settings:postedarticles'))
+        self.assertEqual(response.status_code, 200)
+
+    # ログインしていない状態ではビューにアクセスする事が出来ない
+    def test_fail_access_not_logined(self):
+        response = self.client.get(reverse('settings:postedarticles'))
+        self.assertEqual(response.status_code, 302)
+
+    # /?page=1・/?page=2にアクセスする事が出来る
+    def test_success_access_page12(self):
+        self.client.login(username='pavtester',
+                          password='pavtester0123')
+        response = self.client.get(''.join([reverse('settings:postedarticles'),
+                                            '?', urlencode(dict(page='1'))]))
+        self.assertEqual(response.status_code, 200)
+
+        response2 = self.client.get(''.join([reverse('settings:postedarticles'),
+                                             '?', urlencode(dict(page='2'))]))
+        self.assertEqual(response2.status_code, 200)
+
+    # /?page=6(存在しないページ)にアクセスする事が出来ない
+    def test_fail_access_page12(self):
+        self.client.login(username='pavtester',
+                          password='pavtester0123')
+        response = self.client.get(''.join([reverse('settings:postedarticles'),
+                                            '?', urlencode(dict(page='6'))]))
+        self.assertEqual(response.status_code, 404)
+
+
+class UpdateArticlePostFormTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        Tag.objects.create(tag='update_article_post_tester')
+        return super().setUpClass()
+
+    # 正しいタイトル・記事内容は妥当である
+    def test_valid_form(self):
+        article_tag = Tag.objects.get(tag='update_article_post_tester')
+        article_data = {
+            'title': 'A' * 1000,
+            'content': 'A' * 10000,
+            'tags': [article_tag]
+        }
+        form = UpdateArticleForm(data=article_data)
+        self.assertTrue(form.is_valid())
+
+    # 誤った形式のタイトル・記事内容は妥当でない
+    def test_invalid_wrongformat(self):
+        article_tag = Tag.objects.get(tag='update_article_post_tester')
+        wrong_format_data_list = [
+            {
+                'title': 'A' * 1001,
+                'content': 'sample_content',
+                'tags': [article_tag]
+            },
+            {
+                'title': 'A' * 1000,
+                'content': 'A' * 10001,
+                'tags': [article_tag]
+            },
+            {
+                'title': 'A' * 1001,
+                'content': 'A' * 10001,
+                'tags': []
+            }
+        ]
+
+        for wrong_format_data in wrong_format_data_list:
+            form = UpdateArticleForm(data=wrong_format_data)
+            self.assertFalse(form.is_valid())
+
+
+@override_settings(AXES_ENABLED=False)
+class UpdateArticleViewTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        User.objects.create_user(username='updatearticleview_tester',
+                                 email='updatearticleview@test.com',
+                                 password='postarticle0123')
+        User.objects.create_user(username='updatearticleview_tester2',
+                                 email='updatearticleview2@test.com',
+                                 password='postarticle0123')
+
+        user = User.objects.get(username='updatearticleview_tester')
+        user2 = User.objects.get(username='updatearticleview_tester2')
+
+        Tag.objects.create(tag='updatearticleview_test_tag')
+        article_tag = Tag.objects.get(tag='updatearticleview_test_tag')
+
+        Article.objects.create(author_id=user.pk, title='test_title',
+                               content='test_content')
+        article = Article.objects.get(title='test_title')
+        article.tags.add(article_tag)
+        article.save()
+
+        Article.objects.create(author_id=user2.pk, title='test_title2',
+                               content='test_content2')
+        article2 = Article.objects.filter(title='test_title2').first()
+        article2.tags.add(article_tag)
+        article2.save()
+        return super().setUpClass()
+
+    # ログインしているユーザに関連している記事のページへアクセスする事が出来る
+    def test_success_access(self):
+        self.client.login(username='updatearticleview_tester',
+                          password='postarticle0123')
+        article = Article.objects.get(title='test_title')
+        response = self.client.get(reverse('settings:updatearticle',
+                                           kwargs={'pk': article.pk}))
+        self.assertEquals(response.status_code, 200)
+
+    # ログインしていない状態ではアクセスする事が出来ない
+    def test_fail_access_notlogin(self):
+        article = Article.objects.get(title='test_title')
+        response = self.client.get(reverse('settings:updatearticle',
+                                           kwargs={'pk': article.pk}))
+        self.assertEquals(response.status_code, 302)
+
+    # ログインしているユーザが作成していない記事のページへアクセスする事が出来ない
+    def test_fail_access_notauthor(self):
+        self.client.login(username='updatearticleview_tester2',
+                          password='postarticle0123')
+        response = self.client.get(reverse('settings:updatearticle',
+                                           kwargs={'pk': 1}))
+        self.assertEquals(response.status_code, 403)
+
+    # 正しい形式のタイトル・内容によって記事を変更する事が出来る
+    def test_success_edit(self):
+        self.client.login(username='updatearticleview_tester',
+                          password='postarticle0123')
+        article = Article.objects.get(title='test_title')
+        response = self.client.get(reverse('settings:updatearticle',
+                                           kwargs={'pk': article.pk}))
+        self.assertEquals(response.status_code, 200)
+
+        # タグの形式が間違っていると表示されている
+        tag = Tag.objects.get(tag='updatearticleview_test_tag')
+        edit_data = {
+            'title': 'A' * 1000,
+            'content': 'A' * 10000,
+            'tags': [tag.pk],
+        }
+        response = self.client.post(reverse('settings:updatearticle',
+                                            kwargs={'pk': article.pk}),
+                                    edit_data, format='text/html')
+        self.assertEquals(response.status_code, 302)
+
+    # 誤った形式のタイトル・内容によって記事を変更する事が出来ない
+    def test_fail_edit_wrongformat(self):
+        self.client.login(username='updatearticleview_tester',
+                          password='postarticle0123')
+        article = Article.objects.get(title='test_title')
+        response = self.client.get(reverse('settings:updatearticle',
+                                           kwargs={'pk': article.pk}))
+        self.assertEquals(response.status_code, 200)
+
+        wrong_format_edit_data_list = [
+            {
+                'title': 'A' * 1001,
+                'content': 'sample_content'
+            },
+            {
+                'title': 'sample_title',
+                'content': 'A' * 10001
+            },
+            {
+                'title': 'A' * 1001,
+                'content': 'A' * 10001
+            }
+        ]
+        for wrong_format_edit_data in wrong_format_edit_data_list:
+            response = self.client.post(reverse('settings:updatearticle',
+                                                kwargs={'pk': article.pk}),
+                                        wrong_format_edit_data,
+                                        format='text/html')
+            self.assertEquals(response.status_code, 200)
