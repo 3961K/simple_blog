@@ -1,6 +1,8 @@
 from django.urls import path
 
-from .views import UpdateUsernameView, UpdateEmailView, UpdateFolloweeView, UpdateFollowerView, UpdatePasswordView, CreateArticleView, PostedArticleListView
+from .views import UpdateUsernameView, UpdateEmailView, UpdateFolloweeView, \
+    UpdateFollowerView, UpdatePasswordView, CreateArticleView, \
+    PostedArticleListView, UpdateArticleView
 
 app_name = 'settings'
 
@@ -12,4 +14,5 @@ urlpatterns = [
     path('password', UpdatePasswordView.as_view(), name='password'),
     path('newarticle', CreateArticleView.as_view(), name='newarticle'),
     path('postedarticles', PostedArticleListView.as_view(), name='postedarticles'),
+    path('postedarticles/<int:pk>', UpdateArticleView.as_view(), name='updatearticle'),
 ]

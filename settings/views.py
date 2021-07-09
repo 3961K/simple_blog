@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, ListView, CreateView
 
-from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, CreateArticleForm
+from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, CreateArticleForm, UpdateArticleForm
 from users.forms import FollowForm
 from authenticate.models import Relation
 from articles.models import Article
@@ -106,3 +106,25 @@ class PostedArticleListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self, *args, **kwargs):
         return self.model.objects.filter(author=self.request.user)
+
+
+class OnlyAuthorMxin(UserPassesTestMixin):
+    """
+    記事の編集ページを作者のみがアクセスするためのMixin
+    """
+
+    def test_func(self):
+        user = self.request.user
+
+        article = Article.objects.filter(pk=self.kwargs['pk']).select_related('author').get()
+        if article.author == user:
+            return True
+
+        return False
+
+
+class UpdateArticleView(LoginRequiredMixin, OnlyAuthorMxin, UpdateView):
+    model = Article
+    form_class = UpdateArticleForm
+    template_name = 'settings/update_article.html'
+    success_url = reverse_lazy('settings:postedarticles')
