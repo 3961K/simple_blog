@@ -1,15 +1,21 @@
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from io import BytesIO
+import tempfile
 from urllib.parse import urlencode
+from PIL import Image
 
 from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, \
-    CreateArticleForm, UpdateArticleForm
+    CreateArticleForm, UpdateArticleForm, UpdateProfileForm
 from authenticate.models import Relation
 from articles.models import Article, Tag
 
 # Create your tests here.
 User = get_user_model()
+
+MEDIA_ROOT = tempfile.mkdtemp()
 
 
 class UpdateUsernameFormTest(TestCase):
@@ -694,3 +700,122 @@ class UpdateArticleViewTest(TestCase):
                                         wrong_format_edit_data,
                                         format='text/html')
             self.assertEquals(response.status_code, 200)
+
+
+class NeedImageTestMxin():
+    def create_image_dict(self, size=(1024, 1024)):
+        img_file = BytesIO()
+        img = Image.new('RGBA', size=size, color=(255, 255, 255))
+        img.save(img_file, 'png')
+        img_file.name = 'test.png'
+        img_file.seek(0)
+
+        img_dict = {
+            'icon': SimpleUploadedFile(
+                img_file.name,
+                img_file.read(),
+                content_type='image/png')}
+        return img_dict
+
+
+class UpdateProfileFormTest(NeedImageTestMxin, TestCase):
+    @classmethod
+    def setUpClass(cls):
+        User.objects.create_user(username='updateproileformtester',
+                                 email='updateproileformtester@test.com',
+                                 password='updatepr0f1le0123')
+        return super().setUpClass()
+
+    # 縦幅・横幅1024px以下の画像と1000文字以下の文字列はアイコンとプロフィールとして妥当な値である
+    def test_valid(self):
+        user = User.objects.get(username='updateproileformtester')
+        correct_icon_dict = self.create_image_dict()
+
+        correct_profile = {
+            'profile_message': 'A' * 1000,
+        }
+
+        form = UpdateProfileForm(user, correct_profile, correct_icon_dict)
+        self.assertTrue(form.is_valid())
+
+    # 縦幅・横幅1024px以上の画像もしくは1000文字以上の文字列はアイコンとプロフィールとして妥当な値ではない
+    def test_invalid(self):
+        correct_icon_dict = self.create_image_dict()
+        wrong_icon_dict = self.create_image_dict(size=(1024, 1025))
+        wrong_icon_dict2 = self.create_image_dict(size=(1025, 1024))
+
+        correct_profile = {
+            'profile_message': 'A' * 1000,
+        }
+        wrong_profile = {
+            'profile_message': 'A' * 1001,
+        }
+
+        wrong_pattern_list = [
+            {
+                "profile": correct_profile,
+                "icon": wrong_icon_dict
+            },
+            {
+                "profile": correct_profile,
+                "icon": wrong_icon_dict2
+            },
+            {
+                "profile": wrong_profile,
+                "icon": correct_icon_dict
+            },
+            {
+                "profile": wrong_profile,
+                "icon": wrong_icon_dict
+            },
+            {
+                "profile": wrong_profile,
+                "icon": wrong_icon_dict2
+            }
+        ]
+
+        for wrong_pattern in wrong_pattern_list:
+            form = UpdateProfileForm(wrong_pattern["profile"], wrong_pattern["icon"])
+            self.assertFalse(form.is_valid())
+
+
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+@override_settings(AXES_ENABLED=False)
+class UpdateProfileViewTest(NeedImageTestMxin, TestCase):
+    @classmethod
+    def setUpClass(cls):
+        User.objects.create_user(username='updateprofileview_tester',
+                                 email='updateprofileview@test.com',
+                                 password='pr0f1le0123')
+        return super().setUpClass()
+
+    # ログインしているユーザに関連している記事のページへアクセスする事が出来る
+    def test_success_access(self):
+        self.client.login(username='updateprofileview_tester',
+                          password='pr0f1le0123')
+        response = self.client.get(reverse('settings:profile'))
+        self.assertEquals(response.status_code, 200)
+
+    # ログインしていない状態ではアクセスする事が出来ない
+    def test_fail_access_notlogin(self):
+        response = self.client.get(reverse('settings:profile'))
+        self.assertEquals(response.status_code, 302)
+
+    # 縦幅・横幅1024px以下の画像と1000文字以下の文字列はアイコンとプロフィールによって更新する事が出来る
+    def test_success_update_profile(self):
+        self.client.login(username='updateprofileview_tester',
+                          password='pr0f1le0123')
+
+        correct_icon_dict = self.create_image_dict()
+        correct_profile = {
+            'icon': correct_icon_dict['icon'],
+            'profile_message': 'A' * 1000,
+        }
+        response = self.client.post(reverse('settings:profile'),
+                                    correct_profile,
+                                    format='text/html')
+        self.assertEquals(response.status_code, 302)
+
+        user = User.objects.get(username='updateprofileview_tester')
+        self.assertEquals(user.icon, 'images/test.png')
+        self.assertEquals(user.profile_message, 'A' * 1000)
