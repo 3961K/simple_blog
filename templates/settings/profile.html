@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_header %}
+<link rel="stylesheet" href="{% static 'settings/links.css' %}">
+<link rel="stylesheet" href="{% static 'settings/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="settings-entire">
+        {% include 'settings/links.html' %}
+
+        <div class="profile-form">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                {% for form_field in form %}
+                    <div class="form-group">
+                        {{ form_field.errors }}
+                        <label for="{{ form_field.id_for_label }}">{{ form_field.label_tag }}</label><br>
+                        {{ form_field }}
+                    </div>
+                {% endfor %}
+                <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="更新"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}

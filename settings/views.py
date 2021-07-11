@@ -5,7 +5,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, ListView, CreateView
 
-from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, CreateArticleForm, UpdateArticleForm
+from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, \
+    CreateArticleForm, UpdateArticleForm, UpdateProfileForm
 from users.forms import FollowForm
 from authenticate.models import Relation
 from articles.models import Article
@@ -128,3 +129,21 @@ class UpdateArticleView(LoginRequiredMixin, OnlyAuthorMxin, UpdateView):
     form_class = UpdateArticleForm
     template_name = 'settings/update_article.html'
     success_url = reverse_lazy('settings:postedarticles')
+
+
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
+    template_name = 'settings/profile.html'
+    form_class = UpdateProfileForm
+    model = User
+    success_url = reverse_lazy('settings:profile')
+
+    def dispatch(self, *args, **kwargs):
+        return super(UpdateProfileView, self).dispatch(*args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateProfileView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
+    def get_object(self, queryset=None):
+        return User.objects.get(username=self.request.user)
