@@ -2,7 +2,11 @@
 {% load static %}
 
 {% block extra_header %}
-<link rel="stylesheet" href="{% static 'articles/article.css' %}">
+    <link rel="stylesheet" href="{% static 'articles/article.css' %}">
+    {% if user.is_authenticated %}
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous" defer></script>
+        <script src="{% static 'users/follow.js' %}" defer></script>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -11,6 +15,21 @@
             <ul>
                 <li><img src="/media/{{ article.author.icon }}" style="border-radius: 50px; width: 50px; height: 50px;"></li>
                 <li><b>ユーザ名:</b> <a href="{% url 'users:articles' article.author.username %}">{{ article.author.username }}</a></li>
+
+                {% if user.is_authenticated and user.username != article.author.username%}
+                {% load is_follow %}
+                {% is_follow user article.author as follow_status %}
+                <form name="follow" action="{% url 'users:follow' article.author.username %}" method="POST">
+                    {% csrf_token %}
+                    {{ follow_form.follower }}
+                    {% if follow_status %}
+                        <input class="btn btn-info" name="follow_button" type="submit" value="フォロー中"/>
+                    {% else %}
+                        <input class="btn btn-info" name="follow_button" type="submit" value="フォローする"/>
+                    {% endif %}
+                </form>
+                {% endif %}    
+
                 <li class="profile_message"><b>プロフィール:</b> <br>{{ article.author.profile_message|slice:":100" }} ...</li>
                 <li class="relation"><a href="{% url 'users:followees' article.author.username %}"><b> Follow </b></a><br> {{ article.author.followees.all|length }} </li>
                 <li class="relation"><a href="{% url 'users:followers' article.author.username %}"><b> Follower </b></a><br> {{ article.author.followers.all|length }} </li>
