@@ -13,7 +13,7 @@
                 <li><b>ユーザ名:</b> <a href="{% url 'users:articles' article.author.username %}">{{ article.author.username }}</a></li>
                 <li class="profile_message"><b>プロフィール:</b> <br>{{ article.author.profile_message|slice:":100" }} ...</li>
                 <li class="relation"><a href="{% url 'users:followees' article.author.username %}"><b> Follow </b></a><br> {{ article.author.followees.all|length }} </li>
-                <li class="relation"><a href="{% url 'users:followers' article.author.username %}"><b> Follow </b></a><br> {{ article.author.followers.all|length }} </li>
+                <li class="relation"><a href="{% url 'users:followers' article.author.username %}"><b> Follower </b></a><br> {{ article.author.followers.all|length }} </li>
             </ul>
         </div>
 
