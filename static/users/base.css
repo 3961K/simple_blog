@@ -36,6 +36,10 @@ a:hover {
     background-color: #fafafa;
 }
 
+.user-profile1 .profile_message {
+    word-break : break-all;
+}
+
 .user-profile2 {
     margin-top: 12.5%;
     padding-top: 7.25%;
