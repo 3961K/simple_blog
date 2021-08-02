@@ -27,6 +27,10 @@ a:hover {
     background-color: #fafafa;
 }
 
+.article-author-profile .profile_message {
+    word-break : break-all;
+}
+
 .article-author-profile li.relation {
     padding-right: 1%;
     float: left;
