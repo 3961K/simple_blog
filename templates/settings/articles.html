@@ -3,9 +3,7 @@
 
 {% block extra_header %}
     <link rel="stylesheet" href="{% static 'settings/links.css' %}">
-    {% if article_list %}
-        <link rel="stylesheet" href="{% static 'settings/articles.css' %}">
-    {% endif %}
+    <link rel="stylesheet" href="{% static 'settings/articles.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -13,17 +11,17 @@
         {% include 'settings/links.html' %}
 
         <div class="posted-articles">
-            <ul>
-                {% for article in article_list %}
-                    <ul class="article">
-                        <li class="author-info">{{ article.create_date }}に投稿</li>
-                        <li class="article-title"><a href="{% url 'settings:updatearticle' article.pk %}"> {{ article.title }} </a></li>
-                        <li class="article-content">{{ article.content|slice:":30" }} ... </li>
-                    </ul>
-                {% endfor %}
-            </ul>
-
             {% if article_list %}
+                <ul>
+                    {% for article in article_list %}
+                        <ul class="article">
+                            <li class="author-info">{{ article.create_date }}に投稿</li>
+                            <li class="article-title"><a href="{% url 'settings:updatearticle' article.pk %}"> {{ article.title }} </a></li>
+                            <li class="article-content">{{ article.content|slice:":30" }} ... </li>
+                        </ul>
+                    {% endfor %}
+                </ul>
+
                 <ul class="pagination">
                     {% if page_obj.has_previous %}
                         <li class="page-item">
@@ -49,6 +47,8 @@
                         </li>
                     {% endif %}
                 </ul>
+            {% else %}
+                まだ記事を投稿していません。
             {% endif %}
         </div>
     </div>

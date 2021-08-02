@@ -9,6 +9,7 @@ from django.views.generic import FormView, CreateView, DetailView, ListView
 from django.shortcuts import render
 
 
+from users.forms import FollowForm
 from .forms import FavoriteArticleForm, PostCommentForm, SearchArticleForm
 from .models import Article, Tag
 
@@ -95,6 +96,16 @@ class ArticleView(DetailView):
             if self.object.is_favorited(self.request.user) else '☆'
         context['favorite_status'] = 'favorited' \
             if self.object.is_favorited(self.request.user) else 'notfavorited'
+
+        # 認証されていないユーザの場合は現時点のデータを返す
+        if not self.request.user.is_authenticated:
+            return context
+
+        # 認証ユーザの場合はFavoriteArticleFormに現在のユーザ名を設定
+        username = self.request.user.username
+        initial_form_dict = dict(follower=username)
+        follow_form = FollowForm(initial=initial_form_dict)
+        context['follow_form'] = follow_form
 
         return context
 

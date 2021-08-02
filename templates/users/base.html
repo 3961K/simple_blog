@@ -18,7 +18,7 @@
             </form>
             {% endif %}
 
-            <li class="profile_message"><b>プロフィール:</b> <br>{{ profile_user.profile_message|slice:":100" }}...</li>
+            <li class="profile_message"><b>プロフィール:</b> <br>{{ profile_user.profile_message }}</li>
             <li class="relation"><a href="{% url 'users:followees' profile_user.username %}"><b>Follow</b></a> <br> {{ profile_user.followees.all|length }} </li>
             <li class="relation"><a href="{% url 'users:followers' profile_user.username %}"><b>Follower</b></a> <br> {{ profile_user.followers.all|length }} </li>
         </ul>
