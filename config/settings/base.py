@@ -131,3 +131,5 @@ LOGIN_REDIRECT_URL = 'articles:articles'
 LOGOUT_REDIRECT_URL = 'articles:articles'
 
 AXES_ONLY_USER_FAILURES = True
+
+SESSION_COOKIE_HTTPONLY = True
