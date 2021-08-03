@@ -2,24 +2,33 @@ ul li {
     list-style: none;
 }
 
-.posted-articles {
-    width: 75%;
-    display: block;
-    margin : 1%;
-    padding : 2%;
-    border : 0.5px solid #ffffff ;
-    border-radius: 1em;
-    background-color: #fafafa;
+a {
+    color: grey;
+    text-decoration: none;
 }
 
-.posted-articles .article {
+.user-profile-entire {
+    width: 100%;
+}
+
+.favorited-articles {
+    display: block;
+    margin: 2.5% 12.5% 0% 12.5%;
+    padding : 2% 10.5% 2% 2%;
+    border : 0.5px solid #ffffff ;
+    border-radius: 1em;
+    background-color: #ffffff;
+    word-break : break-all;
+}
+
+.favorited-articles .favorited-articles-header {
+    padding-left: 80px;
+}
+
+.favorited-articles .article {
     padding-top: 2.5%;
 }
 
-.posted-articles .pagination {
-    padding-left: 50%;
-}
-
-.article-title {
-    word-break : break-all;
+.favorited-articles .pagination {
+    padding-left: 43.5%;
 }

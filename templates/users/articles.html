@@ -17,6 +17,12 @@
         {% include 'users/base.html' %}
 
         <div class="posted-articles">
+            <div class="posted-articles-header">
+                <div class="alert alert-primary">
+                    {{ profile_user.username }}が投稿した記事
+                </div>
+            </div>
+
             <ul>
                 {% for article in article_list %}
                     <ul class="article">

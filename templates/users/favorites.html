@@ -16,7 +16,13 @@
     <div class="user-profile-entire">
         {% include 'users/base.html' %}
 
-        <div class="posted-articles">
+        <div class="favorited-articles">
+            <div class="favorited-articles-header">
+                <div class="alert alert-primary">
+                    {{ profile_user.username }}がお気に入りに追加した記事
+                </div>
+            </div>
+
             <ul>
                 {% for article in article_list %}
                     <ul class="article">
