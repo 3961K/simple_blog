@@ -38,11 +38,11 @@ $(function() {
             const status = data["data"]["status"];
             if (status == "favorited")
             {
-                $("#favorite_button").attr("value", "★");
+                $("#favorite_button").attr("value", "お気に入り済み");
             }
             else if (status == "notfavorited")
             {
-                $("#favorite_button").attr("value", "☆");
+                $("#favorite_button").attr("value", "お気に入りに追加");
             }
         });
     });
