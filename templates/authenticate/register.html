@@ -2,22 +2,98 @@
 {% load static %}
 
 {% block extra_header %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'authenticate/register.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class='content-register'>
+    <div class='register-form'>
+        <div class="register-header">
+            Register
+        </div>
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    ⚠️{{ error }}
+                    <br>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <form action='' method='POST'>
             {% csrf_token %}
             {{ form.non_field_errors }}
-            {% for form_field in form %}
-                <div class='form-group'>
-                    <label for='{{ form_field.id_for_label }}'>{{ form_field.label_tag }}</label>
-                    {{ form_field }}
-                    {{ form_field.errors }}
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-user"></i></div>
+                    </div>
+                    {{ form.username }}
                 </div>
-            {% endfor %}
-            <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="登録"/>
+
+                {% if form.username.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.username.errors %}
+                            ⚠️{{ error }}
+                            <br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+    
+ 
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-envelope"></i></div>
+                    </div>
+                    {{ form.email }}
+                </div>
+
+                {% if form.email.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.email.errors %}
+                            ⚠️{{ error }}
+                            <br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+        
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-key"></i></div>
+                    </div>
+                    {{ form.password1 }}
+                </div>
+
+                {%if form.password1.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.password1.errors %}
+                            ⚠️{{ error }}
+                            <br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+    
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-key"></i></div>
+                    </div>
+                    {{ form.password2 }}
+                </div>
+ 
+                {%if form.password2.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.password2.errors %}
+                            ⚠️{{ error }}
+                            <br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="form-row text-center">
+                    <div class="col-12">
+                       <input class="btn btn-primary" type="submit" value="登録"/>
+                    </div>
+                </div>
         </form>
     </div>
 {% endblock %}
