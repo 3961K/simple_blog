@@ -2,9 +2,7 @@
 {% load static %}
 
 {% block extra_header %}
-    {% if article_list %}
-        <link rel="stylesheet" href="{% static 'users/favorites.css' %}">
-    {% endif %}
+    <link rel="stylesheet" href="{% static 'users/favorites.css' %}">
     <link rel="stylesheet" href="{% static 'users/base.css' %}">
     {% if user.is_authenticated %}
         <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous" defer></script>
@@ -18,9 +16,15 @@
 
         <div class="favorited-articles">
             <div class="favorited-articles-header">
-                <div class="alert alert-primary">
-                    {{ profile_user.username }}がお気に入りに追加した記事
-                </div>
+                {% if article_list %}
+                    <div class="alert alert-primary">
+                        {{ profile_user.username }}がお気に入りに追加した記事
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        ⚠️{{ profile_user.username }}がお気に入りに追加した記事はまだありません
+                    </div>
+                {% endif %}
             </div>
 
             <ul>
