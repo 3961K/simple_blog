@@ -84,7 +84,7 @@ class FavoriteListView(ListView):
 class FolloweeListView(ListView):
     template_name = 'users/followees.html'
     model = Relation
-    paginate_by = 8
+    paginate_by = 9
 
     def get_queryset(self, *args, **kwargs):
         try:
@@ -117,7 +117,7 @@ class FolloweeListView(ListView):
 class FollowerListView(ListView):
     template_name = 'users/followers.html'
     model = Relation
-    paginate_by = 8
+    paginate_by = 9
 
     def get_queryset(self, *args, **kwargs):
         try:
