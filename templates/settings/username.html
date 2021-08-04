@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block extra_header %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="{% static 'settings/links.css' %}">
 <link rel="stylesheet" href="{% static 'settings/username.css' %}">
 {% endblock %}
@@ -9,18 +10,37 @@
 {% block content %}
     <div class="settings-entire">
         {% include 'settings/links.html' %}
-
         <div class="personalinfo-form">
+            <div class="update-username-header">
+                ユーザ名変更
+            </div>
+    
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        ⚠️{{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if form.username.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.username.errors %}
+                        ⚠️{{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <form action="" method="POST">
                 {% csrf_token %}
-                {{ form.non_field_errors }}
-                {% for form_field in form %}
-                    <div class="form-group">
-                        {{ form_field.errors }}
-                        <label for="{{ form_field.id_for_label }}">{{ form_field.label_tag }}</label>
-                        {{ form_field }}
+                <div class="form-group">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fas fa-user"></i></div>
+                        </div>
+                        {{ form.username }}
                     </div>
-                {% endfor %}
+                </div>
                 <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="変更"/>
             </form>
         </div>

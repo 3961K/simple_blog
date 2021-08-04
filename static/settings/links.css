@@ -1,16 +1,23 @@
+html {
+   height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+}  
+
 .settings-entire {
-    width: 100%;
+    height: 100%;
+    margin: 0;
     display: flex;
 }
 
 .settings-links {
-    width: 22.5%;
-    height: 52.5%;
-    margin-top: 5%;
-    margin-left: 5%;
-    border : 0.5px solid #ffffff ;
-    border-radius: 1em;
-    background-color: #fafafa;
+    width: 250px;
+    height: 100%;
+    padding-top: 5%;
+    background-color: #ffffff;
 }
 
 .settings-links ul li {
