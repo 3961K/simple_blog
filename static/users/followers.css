@@ -17,7 +17,7 @@ li.relation {
 }
 
 .followers {
-    width: 100%;
+    width: 1200px;
     margin : 1%;
     padding-left: 10%;
     display: flex;
@@ -47,7 +47,7 @@ li.relation {
 }
 
 .pagination {
-    margin-left: 35%;
+    margin-left: 400px;
 }
 
 .follower-profile {

@@ -1,8 +1,13 @@
+body {
+    width: 100%;
+    margin: 0;
+}
+
 .posted-articles {
-    width: auto;
+    width: 750px;
     height: auto;
     display: block;
-    margin: 2.5% 12.5% 0% 12.5%;
+    margin: 2.5% 12.5% 0% 16.5%;
     padding : 2% 10.5% 2% 2%;
     background-color: #ffffff;
     word-break : break-all;
