@@ -14,18 +14,22 @@ a:hover {
 
 .newarticle-form {
     width: 60%;
-    border-radius: 1em;
+    height: auto;
     background-color: #ffffff;
-    margin-top: 5%;
-    margin-left: 5%;
-    padding-top: 5%;
-    padding-left: 5%;
+    margin-left: 10%;
+    padding: 2.5% 5% 2.5% 5%;
+}
+
+.newarticle-form .each-form-header {
+    color: white;
+    background-color: skyblue;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .form-group label {
     margin-top: 7px;
     margin-right: 10px;
-    width: 200px;
     float: left;
 }
 
@@ -34,7 +38,7 @@ a:hover {
 }
 
 #id_tags li {
-    margin-left: 175px;
+    float: left;
 }
 
 #post-button {

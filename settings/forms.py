@@ -51,8 +51,9 @@ class CreateArticleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
+        self.fields['title'].widget.attrs['class'] = 'form-control'
+        self.fields['content'].widget.attrs['class'] = 'form-control'
+        self.fields['tags'].widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
 
 
 class UpdateArticleForm(forms.ModelForm):
