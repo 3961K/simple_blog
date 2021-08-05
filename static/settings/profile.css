@@ -13,13 +13,30 @@ a:hover {
 }
 
 .profile-form {
-    width: 50%;
+    width: 60%;
+    height: 80%;
     border-radius: 1em;
-    background-color: #fafafa;
+    background-color: #ffffff;
     margin-top: 5%;
-    margin-left: 5%;
+    margin-left: 7.5%;
     padding-top: 1.5%;
     padding-left: 7.5%;
+    padding-right: 7.5%;
+}
+
+.profile-form .each-form-header {
+    color: white;
+    background-color: skyblue;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.profile-form .current-icon img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    border: solid;
+    border-color: #dddddd;
 }
 
 .form-group .errorlist li {
