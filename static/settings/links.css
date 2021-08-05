@@ -1,21 +1,6 @@
-html {
-   height: 100%;
-}
-
-body {
-    height: 100%;
-    margin: 0;
-}  
-
-.settings-entire {
-    height: 100%;
-    margin: 0;
-    display: flex;
-}
-
 .settings-links {
     width: 250px;
-    height: 100%;
+    height: 1000px;
     padding-top: 5%;
     background-color: #ffffff;
 }

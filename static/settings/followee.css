@@ -12,19 +12,15 @@ a:hover {
     text-decoration: none;
 }
 
-.user-profile-entire {
+.settings-entire {
     width: 100%;
-}
-
-li.relation {
-    padding-right: 1%;
-    float: left;
+    display: flex;
 }
 
 .followees {
-    width: 85%;
-    height: 75%;
-    padding: 5% 0% 10% 10%;
+    width: 1200px;
+    margin : 1%;
+    padding-left: 10%;
     display: flex;
     flex-wrap: wrap;
 }
@@ -32,8 +28,8 @@ li.relation {
 .followee {
     width: 250px;
     height: 200px;
-    margin: 1%;
-    padding: 2% 1% 1% 0%;
+    margin: 2%;
+    padding: 1%;
     border : 0.5px solid #ffffff ;
     border-radius: 1em;
     background-color: #ffffff;
@@ -51,11 +47,11 @@ li.relation {
     padding-right: 5%;
 }
 
-.followee .followee-profile {
-    word-break : break-all;
+.pagination {
+    margin-top: -50px;
+    margin-left: 400px;
 }
 
-.pagination {
-    margin-left: -15%;
-    margin-top: 25%;
+.followee-profile {
+    word-break : break-all;
 }
