@@ -1,22 +1,9 @@
-ul li {
-    list-style: none;
-}
-
-a {
-    color: grey;
-    text-decoration: none;
-}
-
-.user-profile-entire {
-    width: 100%;
-}
-
 .posted-articles {
+    width: auto;
+    height: auto;
     display: block;
     margin: 2.5% 12.5% 0% 12.5%;
     padding : 2% 10.5% 2% 2%;
-    border : 0.5px solid #ffffff ;
-    border-radius: 1em;
     background-color: #ffffff;
     word-break : break-all;
 }

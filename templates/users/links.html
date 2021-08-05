@@ -1,0 +1,8 @@
+<div class="profile-links">
+    <ul>
+        <li><a href="{% url 'users:articles' profile_user.username %}">投稿記事一覧</a></li>
+        <li><a href="{% url 'users:favorites' profile_user.username %}">お気に入り記事一覧</a></li>
+        <li><a href="{% url 'users:followees' profile_user.username %}">フォロー ({{ profile_user.followees.all|length }}) </a></li>
+        <li><a href="{% url 'users:followers' profile_user.username %}">フォロワー ({{ profile_user.followers.all|length }}) </a></li>
+    </ul>
+</div>

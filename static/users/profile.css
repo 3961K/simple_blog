@@ -1,0 +1,31 @@
+.user-profile {
+    width: auto;
+    height: auto;
+    margin: 0% 12.5% 0% 12.5%;
+    background-color: #ffffff;
+}
+
+.user-profile .user-icon {
+    margin-left: auto;
+    margin-right: auto;
+    width: 8em;
+}
+
+.user-profile .user-icon img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+}
+
+.user-profile .user-name {
+    margin-left: auto;
+    margin-right: auto;
+    width: 5em;
+    word-break: break-all;
+}
+
+.user-profile .user-profilemessage {
+    padding-left: 10%;
+    padding-right: 15%;
+    word-break : break-all;
+}

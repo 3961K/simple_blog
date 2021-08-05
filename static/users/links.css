@@ -1,0 +1,19 @@
+html {
+    height: 100%;
+ }
+
+body {
+    height: 100%;
+    margin: 0;
+}  
+
+.profile-links {
+    width: 250px;
+    height: 100%;
+    padding-top: 5%;
+    background-color: #ffffff;
+}
+
+.profile-links ul li {
+    padding-top: 12.5%;
+}
