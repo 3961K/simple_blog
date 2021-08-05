@@ -6,15 +6,17 @@
         {% if user.is_authenticated and user.username != profile_user.username%}
         {% load is_follow %}
         {% is_follow user profile_user as follow_status %}
-        <form name="follow" action="{% url 'users:follow' profile_user.username %}" method="POST">
-            {% csrf_token %}
-            {{ follow_form.follower }}
-            {% if follow_status %}
-                <input class="btn btn-info" name="follow_button" type="submit" value="フォロー中"/>
-            {% else %}
-                <input class="btn btn-info" name="follow_button" type="submit" value="フォローする"/>
-            {% endif %}
-        </form>
+        <div class="follow-button">
+            <form name="follow" action="{% url 'users:follow' profile_user.username %}" method="POST">
+                {% csrf_token %}
+                {{ follow_form.follower }}
+                {% if follow_status %}
+                    <input class="btn btn-info" name="follow_button" type="submit" value="フォロー中"/>
+                {% else %}
+                    <input class="btn btn-info" name="follow_button" type="submit" value="フォローする"/>
+                {% endif %}
+            </form>
+        </div>
         {% endif %}
 
         <li class="user-profilemessage"><b>プロフィール:</b> <br>{{ profile_user.profile_message }}</li>

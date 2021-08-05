@@ -29,3 +29,9 @@
     padding-right: 15%;
     word-break : break-all;
 }
+
+.user-profile .follow-button {
+    margin-left: auto;
+    margin-right: auto;
+    width: 8em;
+}
