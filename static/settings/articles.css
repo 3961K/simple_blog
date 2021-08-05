@@ -17,41 +17,14 @@ a:hover {
     display: flex;
 }
 
-.user-profile {
-    width: 25%;
-    height: 100%;
-    margin : 1%;
-}
-
-.user-profile li.relation {
-    padding-right: 1%;
-    float: left;
-}
-
-.user-profile1 {
-    padding-top: 12.5%;
-    padding-bottom: 25%;
-    border : 0.5px solid #ffffff ;
-    border-radius: 1em;
-    background-color: #fafafa;
-}
-
-.user-profile2 {
-    margin-top: 12.5%;
-    padding-top: 7.25%;
-    border : 0.5px solid #ffffff ;
-    border-radius: 1em;
-    background-color: #fafafa;
-}
-
 .posted-articles {
-    width: 75%;
+    width: 60%;
+    height: 100%;
     display: block;
-    margin : 1%;
-    padding : 2%;
+    margin : 0% 7.5% 0% 8%;
+    padding : 6.5% 2% 2% 2%;
     border : 0.5px solid #ffffff ;
-    border-radius: 1em;
-    background-color: #fafafa;
+    background-color: #ffffff;
 }
 
 .posted-articles .article {
