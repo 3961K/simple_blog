@@ -12,6 +12,11 @@ a:hover {
     text-decoration: none;
 }
 
+.settings-entire {
+    width: 100%;
+    display: flex;
+}
+
 .newarticle-form {
     width: 60%;
     height: auto;

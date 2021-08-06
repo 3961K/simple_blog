@@ -12,6 +12,11 @@ a:hover {
     text-decoration: none;
 }
 
+.settings-entire {
+    width: 100%;
+    display: flex;
+}
+
 .profile-form {
     width: 60%;
     height: 100%;
