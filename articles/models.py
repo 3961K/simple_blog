@@ -26,6 +26,9 @@ class Article(models.Model):
                                             blank=True,
                                             related_name='favorited_aritcles')
 
+    class Meta:
+        ordering = ['-create_date']
+
     def __str__(self):
         return self.title
 
@@ -55,9 +58,6 @@ class Article(models.Model):
                 or not self.favorite_users.filter(pk=user.pk).exists()):
             return False
         return True
-
-    class Meta:
-        ordering = ('create_date',)
 
 
 class Comment(models.Model):
