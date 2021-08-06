@@ -2,39 +2,45 @@
 {% load static %}
 
 {% block extra_header %}
-<link rel="stylesheet" href="{% static 'settings/links.css' %}">
 <link rel="stylesheet" href="{% static 'settings/followee.css' %}">
+<link rel="stylesheet" href="{% static 'settings/links.css' %}">
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous" defer></script>
 <script src="{% static 'users/follow.js' %}" defer></script>
 {% endblock %}
 
 {% block content %}
     <div class="settings-entire">
-        {% include 'settings/links.html' %}
+        <div class="settings-sidebar">
+            {% include 'settings/links.html' %}
+        </div>
 
-        <div class="followees">
-            {% for relation in relation_list %}
-                <div class="followee">
-                    <ul>
-                        <li class="followee-icon"><img src="/media/{{ relation.followee.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"></li>
-                        <li class="followee-username"><a href="{% url 'users:articles' relation.followee.username %}"> {{ relation.followee.username }} </a></li>
+        <div class="main-contents">
+            <div class="followees">
+                {% for relation in relation_list %}
+                    <div class="followee">
+                        <ul>
+                            <li class="followee-icon"><img src="/media/{{ relation.followee.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"></li>
+                            <li class="followee-username"><a href="{% url 'users:articles' relation.followee.username %}"> {{ relation.followee.username }} </a></li>
 
-                        {% load is_follow %}
-                        {% is_follow user relation.followee as follow_status %}
-                        <form name="follow" action="{% url 'users:follow' relation.followee.username %}" method="POST">
-                            {% csrf_token %}
-                            {{ follow_form.follower }}
-                            {% if follow_status %}
-                                <input class="btn btn-info" name="follow_button" type="submit" value="フォロー中"/>
-                            {% else %}
-                                <input class="btn btn-info" name="follow_button" type="submit" value="フォローする"/>
+                            {% if user.is_authenticated and user.username != relation.followee.username %}
+                                {% load is_follow %}
+                                {% is_follow user relation.followee as follow_status %}
+                                <form name="follow" action="{% url 'users:follow' relation.followee.username %}" method="POST">
+                                    {% csrf_token %}
+                                    {{ follow_form.follower }}
+                                    {% if follow_status %}
+                                        <input class="btn btn-info" name="follow_button" type="submit" value="フォロー中"/>
+                                    {% else %}
+                                        <input class="btn btn-info" name="follow_button" type="submit" value="フォローする"/>
+                                    {% endif %}
+                                </form>
                             {% endif %}
-                        </form>
 
-                        <li class="followee-profile"> {{ relation.followee.profile_message|slice:":30" }}... </li>
-                    </ul>
-                </div>
-            {% endfor %}
+                            <li class="followee-profile"> {{ relation.followee.profile_message|slice:":30" }}... </li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 

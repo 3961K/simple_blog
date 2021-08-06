@@ -17,7 +17,7 @@ class UpdateUsernameForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
+            field.widget.attrs['class'] = 'form-control'
 
 
 class UpdateEmailForm(forms.ModelForm):
@@ -28,14 +28,16 @@ class UpdateEmailForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
+            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['placeholder'] = field.label
 
 
 class UpdatePasswordForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
+            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['placeholder'] = field.label
 
 
 class CreateArticleForm(forms.ModelForm):
@@ -49,8 +51,9 @@ class CreateArticleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
+        self.fields['title'].widget.attrs['class'] = 'form-control'
+        self.fields['content'].widget.attrs['class'] = 'form-control'
+        self.fields['tags'].widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
 
 
 class UpdateArticleForm(forms.ModelForm):
@@ -82,8 +85,9 @@ class UpdateProfileForm(forms.ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
+        print(self.fields.keys())
+        self.fields['icon'].widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
+        self.fields['profile_message'].widget.attrs['class'] = 'form-control'
         # ログインユーザを取得する
         self.user = user
 

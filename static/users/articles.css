@@ -1,52 +1,20 @@
-ul li {
-    list-style: none;
-}
-
-a {
-    color: grey;
-    text-decoration: none;
-}
-
-.user-profile-entire {
+body {
     width: 100%;
-    display: flex;
-}
-
-.user-profile {
-    width: 25%;
-    height: 100%;
-    margin : 1%;
-}
-
-.user-profile li.relation {
-    padding-right: 1%;
-    float: left;
-}
-
-.user-profile1 {
-    padding-top: 12.5%;
-    padding-bottom: 25%;
-    border : 0.5px solid #ffffff ;
-    border-radius: 1em;
-    background-color: #fafafa;
-}
-
-.user-profile2 {
-    margin-top: 12.5%;
-    padding-top: 7.25%;
-    border : 0.5px solid #ffffff ;
-    border-radius: 1em;
-    background-color: #fafafa;
+    margin: 0;
 }
 
 .posted-articles {
-    width: 75%;
+    width: 750px;
+    height: auto;
     display: block;
-    margin : 1%;
-    padding : 2%;
-    border : 0.5px solid #ffffff ;
-    border-radius: 1em;
-    background-color: #fafafa;
+    margin: 2.5% 12.5% 0% 16.5%;
+    padding : 2% 10.5% 2% 2%;
+    background-color: #ffffff;
+    word-break : break-all;
+}
+
+.posted-articles .posted-articles-header {
+    padding-left: 80px;
 }
 
 .posted-articles .article {
@@ -54,9 +22,5 @@ a {
 }
 
 .posted-articles .pagination {
-    padding-left: 50%;
-}
-
-.article-title {
-    word-break : break-all;
+    padding-left: 43.5%;
 }

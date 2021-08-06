@@ -615,7 +615,7 @@ class UpdateArticleViewTest(TestCase):
 
         Article.objects.create(author_id=user.pk, title='test_title',
                                content='test_content')
-        article = Article.objects.get(title='test_title')
+        article = Article.objects.filter(title='test_title').first()
         article.tags.add(article_tag)
         article.save()
 
@@ -630,14 +630,16 @@ class UpdateArticleViewTest(TestCase):
     def test_success_access(self):
         self.client.login(username='updatearticleview_tester',
                           password='postarticle0123')
-        article = Article.objects.get(title='test_title')
+        author = User.objects.get(username='updatearticleview_tester')
+        article = Article.objects.filter(title='test_title', author=author).get()
         response = self.client.get(reverse('settings:updatearticle',
                                            kwargs={'pk': article.pk}))
         self.assertEquals(response.status_code, 200)
 
     # ログインしていない状態ではアクセスする事が出来ない
     def test_fail_access_notlogin(self):
-        article = Article.objects.get(title='test_title')
+        author = User.objects.get(username='updatearticleview_tester')
+        article = Article.objects.filter(title='test_title', author=author).get()
         response = self.client.get(reverse('settings:updatearticle',
                                            kwargs={'pk': article.pk}))
         self.assertEquals(response.status_code, 302)
@@ -654,7 +656,8 @@ class UpdateArticleViewTest(TestCase):
     def test_success_edit(self):
         self.client.login(username='updatearticleview_tester',
                           password='postarticle0123')
-        article = Article.objects.get(title='test_title')
+        author = User.objects.get(username='updatearticleview_tester')
+        article = Article.objects.filter(title='test_title', author=author).get()
         response = self.client.get(reverse('settings:updatearticle',
                                            kwargs={'pk': article.pk}))
         self.assertEquals(response.status_code, 200)
@@ -675,7 +678,8 @@ class UpdateArticleViewTest(TestCase):
     def test_fail_edit_wrongformat(self):
         self.client.login(username='updatearticleview_tester',
                           password='postarticle0123')
-        article = Article.objects.get(title='test_title')
+        author = User.objects.get(username='updatearticleview_tester')
+        article = Article.objects.filter(title='test_title', author=author).get()
         response = self.client.get(reverse('settings:updatearticle',
                                            kwargs={'pk': article.pk}))
         self.assertEquals(response.status_code, 200)

@@ -10,31 +10,37 @@
 
 {% block content %}
     <div class="settings-entire">
-        {% include 'settings/links.html' %}
+        <div class="settings-sidebar">
+            {% include 'settings/links.html' %}
+        </div>
 
-        <div class="followers">
-            {% for relation in relation_list %}
-                <div class="follower">
-                    <ul>
-                        <li class="follower-icon"><img src="/media/{{ relation.follower.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"></li>
-                        <li class="follower-username"><a href="{% url 'users:articles' relation.follower.username %}"> {{ relation.follower.username }} </a></li>
+        <div class="main-contents">
+            <div class="followers">
+                {% for relation in relation_list %}
+                    <div class="follower">
+                        <ul>
+                            <li class="follower-icon"><img src="/media/{{ relation.follower.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"></li>
+                            <li class="follower-username"><a href="{% url 'users:articles' relation.follower.username %}"> {{ relation.follower.username }} </a></li>
 
-                        {% load is_follow %}
-                        {% is_follow user relation.follower as follow_status %}
-                        <form name="follow" action="{% url 'users:follow' relation.follower.username %}" method="POST">
-                            {% csrf_token %}
-                            {{ follow_form.follower }}
-                            {% if follow_status %}
-                                <input class="btn btn-info" name="follow_button" type="submit" value="フォロー中"/>
-                            {% else %}
-                                <input class="btn btn-info" name="follow_button" type="submit" value="フォローする"/>
+                            {% if user.is_authenticated and user.username != relation.follower.username %}
+                                {% load is_follow %}
+                                {% is_follow user relation.follower as follow_status %}
+                                <form name="follow" action="{% url 'users:follow' relation.follower.username %}" method="POST">
+                                    {% csrf_token %}
+                                    {{ follow_form.follower }}
+                                    {% if follow_status %}
+                                        <input class="btn btn-info" name="follow_button" type="submit" value="フォロー中"/>
+                                    {% else %}
+                                        <input class="btn btn-info" name="follow_button" type="submit" value="フォローする"/>
+                                    {% endif %}
+                                </form>
                             {% endif %}
-                        </form>
 
-                        <li class="follower-profile"> {{ relation.follower.profile_message|slice:":30" }}... </li>
-                    </ul>
-                </div>
-            {% endfor %}
+                            <li class="follower-profile"> {{ relation.follower.profile_message|slice:":30" }}... </li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 

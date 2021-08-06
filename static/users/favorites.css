@@ -1,25 +1,21 @@
-ul li {
-    list-style: none;
-}
-
-.posted-articles {
-    width: 75%;
+.favorited-articles {
+    width: 750px;
+    height: auto;
     display: block;
-    margin : 1%;
-    padding : 2%;
-    border : 0.5px solid #ffffff ;
-    border-radius: 1em;
-    background-color: #fafafa;
+    margin: 2.5% 12.5% 0% 16.5%;
+    padding : 2% 10.5% 2% 2%;
+    background-color: #ffffff;
+    word-break : break-all;
 }
 
-.posted-articles .article {
+.favorited-articles .favorited-articles-header {
+    padding-left: 80px;
+}
+
+.favorited-articles .article {
     padding-top: 2.5%;
 }
 
-.posted-articles .pagination {
-    padding-left: 50%;
-}
-
-.article-title {
-    word-break : break-all;
+.favorited-articles .pagination {
+    padding-left: 43.5%;
 }

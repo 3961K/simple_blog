@@ -138,17 +138,12 @@ class FolloweeListViewTest(TestCase):
                                            kwargs={'username': 'not_exist'}))
         self.assertEqual(response.status_code, 404)
 
-    # /?page=1・/?page=2にアクセスする事が出来る
+    # /?page=1にアクセスする事が出来る
     def test_success_access_page12(self):
         response = self.client.get(''.join([reverse('users:followees',
                                            kwargs={'username': 'followee_tester_1'}),
             '?', urlencode(dict(page='1'))]))
         self.assertEqual(response.status_code, 200)
-
-        response2 = self.client.get(''.join([reverse('users:followees',
-                                             kwargs={'username': 'followee_tester_1'}),
-                                             '?', urlencode(dict(page='2'))]))
-        self.assertEqual(response2.status_code, 200)
 
     # /?page=6(存在しないページ)にアクセスする事が出来ない
     def test_fail_access_page_over(self):
@@ -185,17 +180,12 @@ class FollowerListViewTest(TestCase):
                                            kwargs={'username': 'not_exist'}))
         self.assertEqual(response.status_code, 404)
 
-    # /?page=1・/?page=2にアクセスする事が出来る
+    # /?page=1にアクセスする事が出来る
     def test_success_access_page12(self):
         response = self.client.get(''.join([reverse('users:followers',
                                            kwargs={'username': 'follower_tester_1'}),
             '?', urlencode(dict(page='1'))]))
         self.assertEqual(response.status_code, 200)
-
-        response2 = self.client.get(''.join([reverse('users:followers',
-                                             kwargs={'username': 'follower_tester_1'}),
-                                             '?', urlencode(dict(page='2'))]))
-        self.assertEqual(response2.status_code, 200)
 
     # /?page=6(存在しないページ)にアクセスする事が出来ない
     def test_fail_access_page_over(self):

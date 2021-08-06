@@ -17,33 +17,6 @@ a:hover {
     display: flex;
 }
 
-.user-profile {
-    width: 25%;
-    height: 100%;
-    margin : 1%;
-}
-
-.user-profile li.relation {
-    padding-right: 1%;
-    float: left;
-}
-
-.user-profile1 {
-    padding-top: 12.5%;
-    padding-bottom: 25%;
-    border : 0.5px solid #ffffff ;
-    border-radius: 1em;
-    background-color: #fafafa;
-}
-
-.user-profile1 .profile_message {
-    word-break : break-all;
-}
-
-.user-profile2 {
-    margin-top: 12.5%;
-    padding-top: 7.25%;
-    border : 0.5px solid #ffffff ;
-    border-radius: 1em;
-    background-color: #fafafa;
+.main-contents .user-profile {
+    margin-top: 20px;
 }

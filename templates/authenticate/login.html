@@ -2,27 +2,68 @@
 {% load static %}
 
 {% block extra_header %}
-    <link rel="stylesheet" href="{% static 'authenticate/login.css' %}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'authenticate/login.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class="content-login">
+    <div class="login-form">
+        <div class="login-header">
+            Login
+        </div>
+
         {% if user.is_authenticated %}
-            <div class="already-login-alert">
-                あなたは{{ user.username }}としてログインしています。
+            <div class="alert alert-danger">
+                ⚠️あなたは{{ user.username }}としてログインしています。
             </div>
         {% endif %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    ⚠️{{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if form.username.errors %}
+            <div class="alert alert-danger">
+                {% for error in form.username.errors %}
+                    ⚠️{{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {%if form.password.errors %}
+            <div class="alert alert-danger">
+                {% for error in form.password.errors %}
+                    ⚠️{{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <form action="" method="POST">
             {% csrf_token %}
-            {{ form.non_field_errors }}
-            {% for form_field in form %}
-                <div class="form-group">
-                    <label for="{{ form_field.id_for_label }}">{{ form_field.label_tag }}</label>
-                    {{ form_field }}
-                    {{ form_field.errors }}
+            <div class="form-group">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-user"></i></div>
+                    </div>
+                    {{ form.username }}
                 </div>
-            {% endfor %}
-            <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="ログイン"/>
+
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-key"></i></div>
+                    </div>
+                    {{ form.password }}
+                </div>
+            </div>
+            <div class="form-row text-center">
+                <div class="col-12">
+                   <input class="btn btn-primary" type="submit" value="ログイン"/>
+                </div>
+            </div>
         </form>
     </div>
 {% endblock %}

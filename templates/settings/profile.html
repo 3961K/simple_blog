@@ -11,16 +11,54 @@
         {% include 'settings/links.html' %}
 
         <div class="profile-form">
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        ⚠️{{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="each-form-header">
+                現在のアイコン
+            </div>
+
+            <div class="current-icon">
+                <img src="/media/{{ user.icon }}">
+            </div>
+
             <form action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form.non_field_errors }}
-                {% for form_field in form %}
-                    <div class="form-group">
-                        {{ form_field.errors }}
-                        <label for="{{ form_field.id_for_label }}">{{ form_field.label_tag }}</label><br>
-                        {{ form_field }}
+
+                <div class="form-group">
+                    {% if form.icon.errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.icon.errors %}
+                                ⚠️{{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="each-form-header">
+                        新しいアイコン (※縦・横共に最大1024pxまで)
                     </div>
-                {% endfor %}
+                    {{ form.icon }}
+                </div>
+
+                <div class="form-group">
+                    {% if form.profile_message.errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.profile_message.errors %}
+                                ⚠️{{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="each-form-header">
+                        プロフィールメッセージ (※最大1000文字まで)
+                    </div>
+                    {{ form.profile_message }}
+                </div>
                 <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="更新"/>
             </form>
         </div>
