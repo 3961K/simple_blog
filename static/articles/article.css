@@ -55,19 +55,11 @@ a:hover {
     background-color: #ffffff;
 }
 
-.article-title {
-    margin-left: 5%;
-}
-
-.article-title .title-sentence {
-    font-size: 150%;
-    word-break : break-all;
-}
-
 .article-tags {
     width: 100%;
-    height: 150px;
+    height: 200px;
     margin-top: 30px;
+    padding-top: 35px;
 }
 
 .article-tags .article-tags-header {
@@ -80,10 +72,23 @@ a:hover {
     padding-right: 1%;
     float: left;
 }
+
+.article-title {
+    margin-left: 5%;
+}
+
+.article-title .title-sentence {
+    font-size: 150%;
+    word-break : break-all;
+}
+
 .article-sentence {
-    margin-top: 10px;
     margin-left : 5%;
     margin-right : 5%;
+}
+
+.article-sentence .sentence{
+    white-space: pre-wrap;
     word-break : break-word;
 }
 
@@ -106,9 +111,9 @@ a:hover {
 }
 
 .article-comment {
-    margin-top: 4.5%;
-    margin-left: -0.5%;
-    padding-bottom: 4.5%;
+    margin-top: -5%;
+    border-color: #999999;
     border-bottom-width: 1px;
     border-style: none none solid none;
+    white-space: pre-wrap;
 }

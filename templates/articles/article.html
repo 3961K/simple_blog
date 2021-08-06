@@ -31,12 +31,6 @@
                 {% endif %}
             </div>
 
-            <div class="article-title">
-                <b class="title">Title:</b>
-                <p class="title-sentence">{{ article.title }}</p>
-                <p class="create-date">{{ article.create_date }}</p>
-            </div>
-
             <div class="article-tags">
                 <b class="article-tags-header">Tags:</b>
                 <ul>
@@ -46,10 +40,17 @@
                 </ul>    
             </div>
 
+
+            <div class="article-title">
+                <b class="title">Title:</b>
+                <p class="title-sentence">{{ article.title }}</p>
+                <p class="create-date">{{ article.create_date }}</p>
+            </div>
+
+
             <div class="article-sentence">
-                <b>Sentence:</b>
-                <br>
-                {{ article.content }}
+                <b class="article-sentence-header">Sentence:</b>
+                <div class="sentence">{{ article.content }}</div>
             </div>
 
             <div class="article-comments">
