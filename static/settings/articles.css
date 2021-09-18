@@ -19,7 +19,7 @@ a:hover {
 
 .posted-articles {
     width: 60%;
-    height: 100%;
+    height: auto;
     display: block;
     margin : 0% 7.5% 0% 8%;
     padding : 6.5% 2% 2% 2%;
