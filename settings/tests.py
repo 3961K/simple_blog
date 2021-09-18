@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -381,6 +382,38 @@ class UpdatePasswordViewTest(TestCase):
         response = self.client.post(reverse('settings:password'),
                                     missmatched_password, format='text/html')
         self.assertNotEqual(response.status_code, 302)
+
+
+@override_settings(AXES_ENABLED=False)
+class DeleteUserViewTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        User.objects.create_user(username='delete_user_view',
+                                 email='deleteuserview@test.com',
+                                 password='delete0123')
+        return super().setUpClass()
+
+    # ログインしている状態でアクセスする事が出来る
+    def test_success_access(self):
+        self.client.login(username='delete_user_view',
+                          password='delete0123')
+        response = self.client.get(reverse('settings:delete_user'))
+        self.assertEqual(response.status_code, 200)
+
+    # ログインしていない状態ではアクセスする事が出来ない
+    def test_fail_access(self):
+        response = self.client.get(reverse('settings:delete_user'))
+        self.assertEqual(response.status_code, 302)
+
+    # ログインしている状態でPOSTリクエストを送信する事でそのユーザを削除する
+    def test_success_delete(self):
+        self.client.login(username='delete_user_view',
+                          password='delete0123')
+        response = self.client.post(reverse('settings:delete_user'))
+
+        self.assertEqual(response.status_code, 302)
+        with self.assertRaises(ObjectDoesNotExist):
+            User.objects.get(username='delete_user_view')
 
 
 class CreateArticleFormTest(TestCase):

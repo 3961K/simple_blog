@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_header %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'settings/links.css' %}">
+<link rel="stylesheet" href="{% static 'settings/delete_user.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="settings-entire">
+        {% include 'settings/links.html' %}
+
+        <div class="confirm-form">
+            <div class="alert alert-danger" role="alert">
+                ⚠️{{ user.username }}のアカウント削除を行おうとしています。本当によろしいですか？
+            </div>
+
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input class="btn btn-outline-danger my-2 my-sm-0 user-delete-button" type="submit" value="削除"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}

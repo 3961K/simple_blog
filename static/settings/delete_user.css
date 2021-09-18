@@ -1,0 +1,38 @@
+ul li {
+    list-style: none;
+}
+
+a {
+    color: grey;
+    text-decoration: none;
+}
+
+a:hover {
+    color: grey;
+    text-decoration: none;
+}
+
+.settings-entire {
+    width: 100%;
+    display: flex;
+}
+
+.form-group .errorlist li {
+    margin-left: -11.5%;
+}
+
+.settings-entire .confirm-form {
+    width: 33%;
+    height: 30%;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding : 2%;
+    border : 0.5px solid #cccccc ;
+    border-radius: 1em;
+    background-color: #ffffff;
+}
+
+.settings-entire .user-delete-button {
+    margin: 0% 45% 0% 45%;
+}
