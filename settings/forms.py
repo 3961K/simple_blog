@@ -40,7 +40,7 @@ class UpdatePasswordForm(PasswordChangeForm):
             field.widget.attrs['placeholder'] = field.label
 
 
-class CreateArticleForm(forms.ModelForm):
+class ArticleForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),
                                           widget=forms.CheckboxSelectMultiple,
                                           required=True)
@@ -54,21 +54,6 @@ class CreateArticleForm(forms.ModelForm):
         self.fields['title'].widget.attrs['class'] = 'form-control'
         self.fields['content'].widget.attrs['class'] = 'form-control'
         self.fields['tags'].widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
-
-
-class UpdateArticleForm(forms.ModelForm):
-    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),
-                                          widget=forms.CheckboxSelectMultiple,
-                                          required=True)
-
-    class Meta:
-        model = Article
-        fields = ['title', 'content', 'tags']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
 
 
 class UpdateProfileForm(forms.ModelForm):

@@ -9,7 +9,7 @@ from urllib.parse import urlencode
 from PIL import Image
 
 from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, \
-    CreateArticleForm, UpdateArticleForm, UpdateProfileForm
+    ArticleForm, UpdateProfileForm
 from authenticate.models import Relation
 from articles.models import Article, Tag
 
@@ -416,7 +416,7 @@ class DeleteUserViewTest(TestCase):
             User.objects.get(username='delete_user_view')
 
 
-class CreateArticleFormTest(TestCase):
+class ArticleFormTest(TestCase):
     @classmethod
     def setUpClass(cls):
         Tag.objects.create(tag='post_article_post_test')
@@ -431,7 +431,7 @@ class CreateArticleFormTest(TestCase):
             'tags': [article_tag]
         }
 
-        form = CreateArticleForm(data=article_data)
+        form = ArticleForm(data=article_data)
         self.assertTrue(form.is_valid())
 
     # 誤った形式のタイトル・記事内容は妥当でない
@@ -457,7 +457,7 @@ class CreateArticleFormTest(TestCase):
         ]
 
         for wrong_format_data in wrong_format_data_list:
-            form = CreateArticleForm(data=wrong_format_data)
+            form = ArticleForm(data=wrong_format_data)
             self.assertFalse(form.is_valid())
 
 
@@ -584,49 +584,6 @@ class PostedArticleListView(TestCase):
         response = self.client.get(''.join([reverse('settings:postedarticles'),
                                             '?', urlencode(dict(page='6'))]))
         self.assertEqual(response.status_code, 404)
-
-
-class UpdateArticlePostFormTest(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        Tag.objects.create(tag='update_article_post_tester')
-        return super().setUpClass()
-
-    # 正しいタイトル・記事内容は妥当である
-    def test_valid_form(self):
-        article_tag = Tag.objects.get(tag='update_article_post_tester')
-        article_data = {
-            'title': 'A' * 1000,
-            'content': 'A' * 10000,
-            'tags': [article_tag]
-        }
-        form = UpdateArticleForm(data=article_data)
-        self.assertTrue(form.is_valid())
-
-    # 誤った形式のタイトル・記事内容は妥当でない
-    def test_invalid_wrongformat(self):
-        article_tag = Tag.objects.get(tag='update_article_post_tester')
-        wrong_format_data_list = [
-            {
-                'title': 'A' * 1001,
-                'content': 'sample_content',
-                'tags': [article_tag]
-            },
-            {
-                'title': 'A' * 1000,
-                'content': 'A' * 10001,
-                'tags': [article_tag]
-            },
-            {
-                'title': 'A' * 1001,
-                'content': 'A' * 10001,
-                'tags': []
-            }
-        ]
-
-        for wrong_format_data in wrong_format_data_list:
-            form = UpdateArticleForm(data=wrong_format_data)
-            self.assertFalse(form.is_valid())
 
 
 @override_settings(AXES_ENABLED=False)

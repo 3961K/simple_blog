@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import UpdateView, ListView, CreateView, DeleteView
 
 from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, \
-    CreateArticleForm, UpdateArticleForm, UpdateProfileForm
+    ArticleForm, UpdateProfileForm
 from users.forms import FollowForm
 from authenticate.models import Relation
 from articles.models import Article
@@ -99,7 +99,7 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
 
 class CreateArticleView(LoginRequiredMixin, CreateView):
     template_name = 'settings/newarticle.html'
-    form_class = CreateArticleForm
+    form_class = ArticleForm
     model = Article
     success_url = reverse_lazy('settings:username')
 
@@ -138,7 +138,7 @@ class OnlyAuthorMixin(UserPassesTestMixin):
 
 class UpdateArticleView(LoginRequiredMixin, OnlyAuthorMixin, UpdateView):
     model = Article
-    form_class = UpdateArticleForm
+    form_class = ArticleForm
     template_name = 'settings/update_article.html'
     success_url = reverse_lazy('settings:postedarticles')
 
