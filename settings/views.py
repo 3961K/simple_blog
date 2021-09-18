@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, ListView, CreateView
 
@@ -109,7 +110,7 @@ class PostedArticleListView(LoginRequiredMixin, ListView):
         return self.model.objects.filter(author=self.request.user)
 
 
-class OnlyAuthorMxin(UserPassesTestMixin):
+class OnlyAuthorMixin(UserPassesTestMixin):
     """
     記事の編集ページを作者のみがアクセスするためのMixin
     """
@@ -117,14 +118,15 @@ class OnlyAuthorMxin(UserPassesTestMixin):
     def test_func(self):
         user = self.request.user
 
-        article = Article.objects.filter(pk=self.kwargs['pk']).select_related('author').get()
+        article = get_object_or_404(Article.objects.filter(pk=self.kwargs['pk']).select_related('author'),
+                                    pk=self.kwargs['pk'])
         if article.author == user:
             return True
 
         return False
 
 
-class UpdateArticleView(LoginRequiredMixin, OnlyAuthorMxin, UpdateView):
+class UpdateArticleView(LoginRequiredMixin, OnlyAuthorMixin, UpdateView):
     model = Article
     form_class = UpdateArticleForm
     template_name = 'settings/update_article.html'
