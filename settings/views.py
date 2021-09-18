@@ -4,7 +4,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView, ListView, CreateView
+from django.views.generic import UpdateView, ListView, CreateView, DeleteView
 
 from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, \
     CreateArticleForm, UpdateArticleForm, UpdateProfileForm
@@ -85,6 +85,16 @@ class UpdatePasswordView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'settings/password.html'
     form_class = UpdatePasswordForm
     success_url = reverse_lazy('settings:username')
+
+
+class DeleteUserView(LoginRequiredMixin, DeleteView):
+    template_name = 'settings/delete_user.html'
+    model = User
+    success_url = reverse_lazy('articles:articles')
+
+    def get_object(self, queryset=None):
+        user = self.request.user
+        return User.objects.get(username=user.username)
 
 
 class CreateArticleView(LoginRequiredMixin, CreateView):
