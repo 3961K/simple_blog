@@ -644,6 +644,14 @@ class UpdateArticleViewTest(TestCase):
                                            kwargs={'pk': article.pk}))
         self.assertEquals(response.status_code, 302)
 
+    # ログインをしている状態で存在しない記事のページへアクセスする事が出来ない
+    def test_fail_access_notexist(self):
+        self.client.login(username='updatearticleview_tester2',
+                          password='postarticle0123')
+        response = self.client.get(reverse('settings:updatearticle',
+                                           kwargs={'pk': 1000}))
+        self.assertEquals(response.status_code, 404)
+
     # ログインしているユーザが作成していない記事のページへアクセスする事が出来ない
     def test_fail_access_notauthor(self):
         self.client.login(username='updatearticleview_tester2',
