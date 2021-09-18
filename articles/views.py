@@ -148,7 +148,7 @@ class PostCommentView(LoginRequiredMixin, CreateView):
 
 class FavoriteArticleView(LoginRequiredMixin, FormView):
     form_class = FavoriteArticleForm
-    template_name = 'articles/blank.html'
+    template_name = 'base/blank.html'
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
