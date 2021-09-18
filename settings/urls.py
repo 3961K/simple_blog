@@ -3,7 +3,7 @@ from django.urls import path
 from .views import UpdateUsernameView, UpdateEmailView, UpdateFolloweeView, \
     UpdateFollowerView, UpdatePasswordView, CreateArticleView, \
     PostedArticleListView, UpdateArticleView, UpdateProfileView, \
-    DeleteUserView
+    DeleteUserView, DeleteArticleView
 
 app_name = 'settings'
 
@@ -17,5 +17,6 @@ urlpatterns = [
     path('newarticle', CreateArticleView.as_view(), name='newarticle'),
     path('postedarticles', PostedArticleListView.as_view(), name='postedarticles'),
     path('postedarticles/<int:pk>', UpdateArticleView.as_view(), name='updatearticle'),
-    path('delete-user/', DeleteUserView.as_view(), name='delete_user')
+    path('postedarticles/<int:pk>/delete', DeleteArticleView.as_view(), name='deletearticle'),
+    path('delete-user', DeleteUserView.as_view(), name='deleteuser')
 ]

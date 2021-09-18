@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, ListView, CreateView, DeleteView
 
@@ -141,6 +141,16 @@ class UpdateArticleView(LoginRequiredMixin, OnlyAuthorMixin, UpdateView):
     form_class = UpdateArticleForm
     template_name = 'settings/update_article.html'
     success_url = reverse_lazy('settings:postedarticles')
+
+
+class DeleteArticleView(LoginRequiredMixin, OnlyAuthorMixin, DeleteView):
+    model = Article
+    template_name = 'base/blank.html'
+    success_url = reverse_lazy('settings:postedarticles')
+
+    def get(self, request, *args, **kwargs):
+        # GETリクエストによってアクセスされた場合は投稿された記事一覧ページへリダイレクト
+        return redirect('settings:postedarticles')
 
 
 class UpdateProfileView(LoginRequiredMixin, UpdateView):

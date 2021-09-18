@@ -146,7 +146,7 @@ class FollowerListView(ListView):
 
 class FollowView(LoginRequiredMixin, FormView):
     form_class = FollowForm
-    template_name = 'users/blank.html'
+    template_name = 'base/blank.html'
 
     def get(self, request, *args, **kwargs):
         username = self.kwargs['username']

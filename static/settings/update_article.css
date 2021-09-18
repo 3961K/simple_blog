@@ -50,3 +50,14 @@ a:hover {
     margin-top: 90%;
     margin-left: 85%;
 }
+
+.delete-form .delete-article-header {
+    color: white;
+    background-color: rgb(235, 123, 141);
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.delete-form #delete-button {
+    margin-left: 85%;
+}
