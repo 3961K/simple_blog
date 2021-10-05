@@ -34,8 +34,8 @@ AWS_STATIC_LOCATION = 'static'
 STATIC_URL = 'https://{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-MEDIA_URL = 'https://{}/'.format(AWS_S3_CUSTOM_DOMAIN)
-print(MEDIA_URL)
+AWS_MEDIA_LOCATION = 'media'
+MEDIA_URL = 'https://{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA_LOCATION)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 DATABASE = {
