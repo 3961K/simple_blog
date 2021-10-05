@@ -1,7 +1,7 @@
 <div class="user-profile">
     <div class="user-profile1">
         <ul>
-            <li class="user-icon"><img src="/media/{{ profile_user.icon }}"></li>
+            <li class="user-icon"><img src="{{ MEDIA_URL }}{{ profile_user.icon }}"></li>
             <li class="user-name">{{ profile_user.username }}</li>
 
             {% if user.is_authenticated and user.username != profile_user.username%}

@@ -13,7 +13,7 @@
     <div class="article-entire">
         <div class="article-author-profile">
             <ul>
-                <li class="author-icon"><img src="/media/{{ article.author.icon }}"></li>
+                <li class="author-icon"><img src="{{ MEDIA_URL }}{{ article.author.icon }}"></li>
                 <li class="author-name"><a href="{% url 'users:articles' article.author.username %}">{{ article.author.username }}</a></li>
             </ul>
         </div>
@@ -75,7 +75,7 @@
                 <div class="comments">
                     {% for comment in article.comment_set.all %}
                         <ul class="article-comment">
-                            <li class="comment-author-icon"><img src="/media/{{ comment.comment_author.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"> <a href="{% url 'users:articles' comment.comment_author.username %}">{{ comment.comment_author.username }}</a> {{ comment.create_data }}</li>
+                            <li class="comment-author-icon"><img src="{{ MEDIA_URL }}{{ comment.comment_author.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"> <a href="{% url 'users:articles' comment.comment_author.username %}">{{ comment.comment_author.username }}</a> {{ comment.create_data }}</li>
                             <li class="comment-content">{{ comment.content }}</li>
                         </ul>
                     {% endfor %}
