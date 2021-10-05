@@ -70,7 +70,6 @@ class UpdateProfileForm(forms.ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(self.fields.keys())
         self.fields['icon'].widget.attrs['class'] = 'mt-2 mb-3 font-weight-normal'
         self.fields['profile_message'].widget.attrs['class'] = 'form-control'
         # ログインユーザを取得する
