@@ -9,6 +9,10 @@ PyMySQL = "*"
 Pillow = "*"
 django-environ = "*"
 django-axes = "*"
+boto3 = "*"
+django-storages = "*"
+gunicorn = "*"
+mysqlclient = "*"
 
 [dev-packages]
 coverage = "*"

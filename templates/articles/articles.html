@@ -21,7 +21,7 @@
         <ul>
             {% for article in article_list %}
                 <ul class="article">
-                    <li class="author-info"><img src='/media/{{ article.author.icon }}' style='border-radius: 50px; width: 25px; height: 25px;'> <a href="{% url 'users:articles' article.author.username %}">{{ article.author.username }}</a>が{{ article.create_date }}に投稿</li>
+                    <li class="author-info"><img src='{{ MEDIA_URL }}{{ article.author.icon }}' style='border-radius: 50px; width: 25px; height: 25px;'> <a href="{% url 'users:articles' article.author.username %}">{{ article.author.username }}</a>が{{ article.create_date }}に投稿</li>
                     <li class="article-title"><a href='{% url "articles:article" article.pk %}'> {{ article.title }} </a></li>
                     <li class="article-content">{{ article.content|slice:":30" }} ... </li>
                 </ul>

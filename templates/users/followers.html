@@ -25,7 +25,7 @@
                 {% for relation in relation_list %}
                     <div class="follower">
                         <ul>
-                            <li class="follower-icon"><img src="/media/{{ relation.follower.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"></li>
+                            <li class="follower-icon"><img src="{{ MEDIA_URL }}{{ relation.follower.icon }}" style="border-radius: 50px; width: 25px; height: 25px;"></li>
                             <li class="follower-username"><a href="{% url 'users:articles' relation.follower.username %}"> {{ relation.follower.username }} </a></li>
     
                             {% if user.is_authenticated and user.username != relation.follower.username %}
