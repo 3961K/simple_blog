@@ -56,7 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), max_length=150, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
-    icon = models.ImageField(_('user icon'), upload_to='images', default='images/default.png')
+    icon = models.ImageField(_('user icon'), upload_to='media/images', default='images/default.png')
     profile_message = models.TextField(_('user profile message'), max_length=1000, blank=True)
     followers = models.ManyToManyField('User', through='Relation', through_fields=('followee', 'follower'), related_name='+')
     followees = models.ManyToManyField('User', through='Relation', through_fields=('follower', 'followee'), related_name='+')

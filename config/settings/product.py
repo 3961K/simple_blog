@@ -32,10 +32,8 @@ AWS_DEFAULT_ACL = 'public-read'
 
 AWS_STATIC_LOCATION = 'static'
 STATIC_URL = 'https://{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-AWS_MEDIA_LOCATION = 'media'
-MEDIA_URL = 'https://{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA_LOCATION)
+MEDIA_URL = 'https://{}/'.format(AWS_S3_CUSTOM_DOMAIN)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 DATABASES = {
